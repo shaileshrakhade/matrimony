@@ -1,23 +1,42 @@
 package com.lagn.authentication.securityConfig;
 
 import com.lagn.authentication.securityConfig.service.CustomUserDetailsService;
+import com.lagn.authentication.service.OAuth2UserService;
+import com.lagn.authentication.service.UserService;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.core.oidc.user.DefaultOidcUser;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AuthenticationSuccessHandler;
+
+import java.io.IOException;
+import java.sql.SQLException;
 
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
+
+//    @Autowired
+//    private CustomOAuth2UserService oauthUserService;
+    @Autowired
+    private OAuth2UserService oAuth2UserService;
 
     //by default spring security secure all the urls of the projects so here we customize some URLS
     // to give the public access i.e not ask for username & password
@@ -25,11 +44,32 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(a -> a.requestMatchers("/login/**")
-                        .permitAll().anyRequest().authenticated());
+                .authorizeHttpRequests(a -> a.requestMatchers("/login/**").permitAll()
+                        .anyRequest().authenticated());
 
-//        httpSecurity.formLogin(Customizer.withDefaults());
-//        httpSecurity.oauth2Login(Customizer.withDefaults());
+        httpSecurity.logout(logoutForm -> {
+            logoutForm.logoutUrl("/do-logout");
+            logoutForm.logoutSuccessUrl("/login?logout=true");
+        });
+        httpSecurity.formLogin(Customizer.withDefaults());
+        httpSecurity.oauth2Login(a -> {
+            a.userInfoEndpoint(b -> {
+            }).successHandler(new AuthenticationSuccessHandler() {
+                @Override
+                public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+                                                    Authentication authentication) throws IOException, ServletException {
+
+                    DefaultOidcUser oauthUser = (DefaultOidcUser) authentication.getPrincipal();
+
+                    try {
+                        oAuth2UserService.createUserOAuthPostLogin(oauthUser);
+                    } catch (SQLException e) {
+                        throw new RuntimeException(e);
+                    }
+                    response.sendRedirect("/secure");
+                }
+            });
+        });
         return httpSecurity.build();
     }
 

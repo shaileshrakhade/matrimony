@@ -27,7 +27,7 @@ public class UserController {
 
     @PostMapping("register")
     public String registerUser(@RequestBody UserDetailsDto userDetails) throws UsernameAlreadyExistException, SQLException {
-        String username = userService.createUser(userDetails).getMobile();
+        String username = userService.createUser(userDetails).getEmail();
         return "User register successfully with username :: " + username;
     }
 

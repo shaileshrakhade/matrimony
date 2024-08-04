@@ -21,7 +21,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserCredentialDto> user = customeUserService.getUserByMobile(username);
+        Optional<UserCredentialDto> user = customeUserService.getUserByEmail(username);
         return user.map(CustomUserDetailsDto ::new).orElseThrow(() -> new UsernameNotFoundException("Username or Password is incorrect..."));
 
     }

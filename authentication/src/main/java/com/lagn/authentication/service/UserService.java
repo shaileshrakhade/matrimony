@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.Optional;
 
 
@@ -24,18 +25,36 @@ public class UserService {
     private final JwtService jwtService;
     private final CustomUserDetailsService customUserDetailsService;
 
-    public Optional<UserCredentialDto> getUserByMobile(String mobile) {
-        return userRepository.findByMobile(mobile).map(user -> {
-            return UserCredentialDto.builder().username(user.getMobile()).password(user.getPassword()).build();
+    public Optional<UserCredentialDto> getUserByEmail(String mobile) {
+        return userRepository.findByEmail(mobile).map(user -> {
+            return UserCredentialDto.builder().username(user.getEmail()).password(user.getPassword()).build();
         });
     }
 
 
     public Users createUser(UserDetailsDto userDetailsDto) throws SQLException {
-        if (userDetailsDto.getMobile().length() != 10) throw new SQLException("mobile number is not valid");
+        if (userDetailsDto.getPhoneNumber().length() != 10) throw new SQLException("Mobile Number is not valid");
+        if (userDetailsDto.getEmail().isEmpty() || userDetailsDto.getEmail().isBlank())
+            throw new SQLException("Email is required");
         if (userDetailsDto.getPassword().isEmpty() || userDetailsDto.getPassword().isBlank())
-            throw new SQLException("password is required");
-        Users user = Users.builder().mobile(userDetailsDto.getMobile()).email(userDetailsDto.getEmail()).name(userDetailsDto.getName()).password(passwordEncoder.encode(userDetailsDto.getPassword())).whatsAppNo(userDetailsDto.getWhatsAppNo()).build();
+            throw new SQLException("Password is required");
+
+        Users user = userRepository.findByEmail(userDetailsDto.getEmail())
+                .stream().findFirst().orElseGet(() ->
+                {
+                    return Users.builder()
+                            .email(userDetailsDto.getEmail())
+                            .name(userDetailsDto.getName())
+                            .password(passwordEncoder.encode(userDetailsDto.getPassword()))
+                            .whatsAppNo(userDetailsDto.getWhatsAppNo())
+                            .birthdate(userDetailsDto.getBirthdate())
+                            .address(userDetailsDto.getAddress())
+                            .gender(userDetailsDto.getGender())
+                            .phoneNumber(userDetailsDto.getPhoneNumber())
+                            .build();
+                });
+
+        user.setLastlogin(new Date());
         return userRepository.save(user);
     }
 
@@ -45,13 +64,8 @@ public class UserService {
     }
 
     public boolean validateToken(String token) {
-        if (!jwtService.isTokenExpired(token)) return getUserByMobile(jwtService.extractUsername(token)).isPresent();
+        if (!jwtService.isTokenExpired(token)) return getUserByEmail(jwtService.extractUsername(token)).isPresent();
         return false;
     }
 
-    public void isUserExist(String username) throws UsernameAlreadyExistException {
-        if (userRepository.findByMobile(username).isPresent()) {
-            throw new UsernameAlreadyExistException();
-        }
-    }
 }

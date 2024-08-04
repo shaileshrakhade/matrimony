@@ -10,13 +10,11 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UserDetailsDto {
-    private String phoneNumber;
+public class OAuth2UserDetailsDto {
+    private String mobile;
     private String password;
     private String email;
     private String name;
     private String whatsAppNo;
-    private String birthdate;
-    private String address;
-    private String gender;
+    private Provider provider;
 }

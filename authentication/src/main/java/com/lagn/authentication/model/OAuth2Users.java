@@ -1,40 +1,37 @@
 package com.lagn.authentication.model;
 
+import com.lagn.authentication.enums.Provider;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.ColumnDefault;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.security.oauth2.core.oidc.AddressStandardClaim;
 
 import java.util.Date;
-
 
 @Entity
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
 @Builder
-@Table(name = "users")
-public class Users {
+@Table(name = "oauthusers")
+public class OAuth2Users {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    @Column(unique = true,length =10)
-    private String phoneNumber;
-    private String password;
     private String name;
-    @Column(unique = true,nullable = false)
+    @Column(unique = true, nullable = false)
     private String email;
-    private String whatsAppNo;
-    @ColumnDefault("True")
-    private boolean isActive;
+    @Enumerated(EnumType.STRING)
+    private Provider provider;
     private Date lastlogin;
     private String birthdate;
-    private String address;
+//    @OneToOne(cascade = CascadeType.ALL)
+////    @JoinColumn(name = "address_id", referencedColumnName = "id")
+//    private Address address;
     private String fullName;
     private String gender;
-
-
-
+    private String phoneNumber;
 }
