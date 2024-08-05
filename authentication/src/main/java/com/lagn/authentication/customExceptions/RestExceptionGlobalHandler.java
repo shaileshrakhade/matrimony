@@ -16,11 +16,17 @@ import java.util.Locale;
 @RestController
 @ControllerAdvice
 public class RestExceptionGlobalHandler {
+    @ExceptionHandler(value = Exception.class)
+    public ResponseEntity<ApiExceptionDto> exception(Exception e) {
+        ApiExceptionDto apiExceptionDto = new ApiExceptionDto(HttpStatus.BAD_REQUEST, e.getMessage());
+        return new ResponseEntity<ApiExceptionDto>(apiExceptionDto, HttpStatus.UNAUTHORIZED);
+    }
+
     @ExceptionHandler(value = SQLException.class)
     public ResponseEntity<ApiExceptionDto> sQLException(SQLException ex) {
         ApiExceptionDto apiExceptionDto;
         if (ex.getMessage().contains("Duplicate entry")) {
-            apiExceptionDto = new ApiExceptionDto(HttpStatus.IM_USED, "Mobile Number is already exist! Please try a login.");
+            apiExceptionDto = new ApiExceptionDto(HttpStatus.IM_USED, "Username is already exist! Please try a login.");
         } else {
             apiExceptionDto = new ApiExceptionDto(HttpStatus.BAD_REQUEST, ex.getMessage());
         }

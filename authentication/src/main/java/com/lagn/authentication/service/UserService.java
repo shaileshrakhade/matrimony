@@ -1,13 +1,13 @@
 package com.lagn.authentication.service;
 
-import com.lagn.authentication.securityConfig.service.CustomUserDetailsService;
-import com.lagn.authentication.customExceptions.exceptions.UsernameAlreadyExistException;
 import com.lagn.authentication.dao.UserCredentialDto;
 import com.lagn.authentication.dao.UserDetailsDto;
 import com.lagn.authentication.model.Users;
 import com.lagn.authentication.repo.UserRepository;
+import com.lagn.authentication.securityConfig.service.CustomUserDetailsService;
 import com.lagn.authentication.util.JwtService;
 import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -17,7 +17,7 @@ import java.util.Optional;
 
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class UserService {
 
     private final UserRepository userRepository;
@@ -38,24 +38,22 @@ public class UserService {
             throw new SQLException("Email is required");
         if (userDetailsDto.getPassword().isEmpty() || userDetailsDto.getPassword().isBlank())
             throw new SQLException("Password is required");
-
-        Users user = userRepository.findByEmail(userDetailsDto.getEmail())
-                .stream().findFirst().orElseGet(() ->
-                {
-                    return Users.builder()
-                            .email(userDetailsDto.getEmail())
-                            .name(userDetailsDto.getName())
-                            .password(passwordEncoder.encode(userDetailsDto.getPassword()))
-                            .whatsAppNo(userDetailsDto.getWhatsAppNo())
-                            .birthdate(userDetailsDto.getBirthdate())
-                            .address(userDetailsDto.getAddress())
-                            .gender(userDetailsDto.getGender())
-                            .phoneNumber(userDetailsDto.getPhoneNumber())
-                            .build();
-                });
-
-        user.setLastlogin(new Date());
-        return userRepository.save(user);
+        if (userRepository.findByEmail(userDetailsDto.getEmail()).isPresent()) {
+                throw new SQLException("Duplicate entry : Email is already exist");
+        } else {
+            Users user = Users.builder()
+                    .email(userDetailsDto.getEmail())
+                    .name(userDetailsDto.getName())
+                    .password(passwordEncoder.encode(userDetailsDto.getPassword()))
+                    .whatsAppNo(userDetailsDto.getWhatsAppNo())
+                    .birthdate(userDetailsDto.getBirthdate())
+                    .address(userDetailsDto.getAddress())
+                    .gender(userDetailsDto.getGender())
+                    .phoneNumber(userDetailsDto.getPhoneNumber())
+                    .build();
+            user.setLastlogin(new Date());
+            return userRepository.save(user);
+        }
     }
 
 
@@ -64,7 +62,7 @@ public class UserService {
     }
 
     public boolean validateToken(String token) {
-        if (!jwtService.isTokenExpired(token)) return getUserByEmail(jwtService.extractUsername(token)).isPresent();
+        if (jwtService.isTokenExpired(token)) return getUserByEmail(jwtService.extractUsername(token)).isPresent();
         return false;
     }
 

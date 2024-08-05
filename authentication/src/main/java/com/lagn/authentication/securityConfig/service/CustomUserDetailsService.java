@@ -1,7 +1,8 @@
 package com.lagn.authentication.securityConfig.service;
 
-import com.lagn.authentication.securityConfig.dto.CustomUserDetailsDto;
+
 import com.lagn.authentication.dao.UserCredentialDto;
+import com.lagn.authentication.securityConfig.dto.CustomUserDetailsDto;
 import com.lagn.authentication.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -15,6 +16,7 @@ import java.util.Optional;
 @Service
 public class CustomUserDetailsService implements UserDetailsService {
 
+
     @Autowired
     @Lazy
     private UserService customeUserService;
@@ -22,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Optional<UserCredentialDto> user = customeUserService.getUserByEmail(username);
-        return user.map(CustomUserDetailsDto ::new).orElseThrow(() -> new UsernameNotFoundException("Username or Password is incorrect..."));
+        return user.map(CustomUserDetailsDto::new).orElseThrow(() -> new UsernameNotFoundException("Username or Password is incorrect..."));
 
     }
 }
