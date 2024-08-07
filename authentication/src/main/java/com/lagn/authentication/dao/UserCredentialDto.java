@@ -10,6 +10,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @Builder
 public class UserCredentialDto {
-    private String username;
+    private String userName;
     private String password;
 }

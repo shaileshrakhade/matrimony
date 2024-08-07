@@ -12,7 +12,7 @@ public class CustomUserDetailsDto implements UserDetails {
     private final String password;
 
     public CustomUserDetailsDto(UserCredentialDto userCredentialDto) {
-        this.username = userCredentialDto.getUsername();
+        this.username = userCredentialDto.getUserName();
         this.password = userCredentialDto.getPassword();
     }
 

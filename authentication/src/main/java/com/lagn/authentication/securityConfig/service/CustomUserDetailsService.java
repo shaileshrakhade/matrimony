@@ -19,11 +19,11 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Autowired
     @Lazy
-    private UserService customeUserService;
+    private UserService userService;
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserCredentialDto> user = customeUserService.getUserByEmail(username);
+        Optional<UserCredentialDto> user = userService.getUserByUserName(username);
         return user.map(CustomUserDetailsDto::new).orElseThrow(() -> new UsernameNotFoundException("Username or Password is incorrect..."));
 
     }

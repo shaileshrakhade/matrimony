@@ -2,46 +2,43 @@ package com.lagn.authentication.controller;
 
 import com.lagn.authentication.customExceptions.exceptions.InvalidTokenException;
 
+import com.lagn.authentication.service.UserService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.catalina.User;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.GetMapping;
-//import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController()
-@RequestMapping("/mrg/")
+@RequestMapping("/")
+@RequiredArgsConstructor
 public class SecureApis {
-    @GetMapping("welcome")
-    public String success() throws InvalidTokenException {
-        try {
-           return  "Login Successfully";
-        } catch (Exception e) {
-            log.error(e.getMessage());
-            throw new InvalidTokenException();
-        }
 
+    private final UserService userService;
+
+    @GetMapping("welcome")
+    public String welcome() throws InvalidTokenException {
+        return "Welcome Login is Successfully";
     }
+
     @GetMapping("me")
-    public ResponseEntity<Object> authenticatedUser() {
+    public ResponseEntity<Object> authenticatedUser() throws InvalidTokenException {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object currentUser =  authentication.getPrincipal();
+        Object currentUser = authentication.getPrincipal();
         return ResponseEntity.ok(currentUser);
     }
 
-//    @GetMapping("token-validate")
-//    public boolean validateToken(@RequestParam("token") String token) throws InvalidTokenException {
-//        try {
-//            return userService.validateToken(token);
-//        } catch (Exception e) {
-//            log.error(e.getMessage());
-//            throw new InvalidTokenException();
-//        }
-//
-//    }
+    @GetMapping("profile")
+    public ResponseEntity<Object> profile() throws InvalidTokenException {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Object currentUser = authentication.getPrincipal();
+        userService.getUserByUserName("");
+        return ResponseEntity.ok(currentUser);
+    }
+
 
 }
