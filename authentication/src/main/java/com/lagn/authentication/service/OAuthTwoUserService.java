@@ -1,6 +1,7 @@
 package com.lagn.authentication.service;
 
 
+import com.lagn.authentication.customExceptions.dto.TokenDto;
 import com.lagn.authentication.dao.UserDetailsDto;
 import com.lagn.authentication.enums.Provider;
 import com.lagn.authentication.model.Users;
@@ -21,7 +22,7 @@ public class OAuthTwoUserService {
     @Lazy
     private  UserService userService;
 
-    public Users createUserGoogleOAuth(DefaultOidcUser defaultOidcUser) throws SQLException {
+    public TokenDto createUserGoogleOAuth(DefaultOidcUser defaultOidcUser) throws SQLException {
         UserDetailsDto userDetailsDto = UserDetailsDto.builder()
                 .userName(defaultOidcUser.getEmail())
                 .fullName(defaultOidcUser.getFullName())

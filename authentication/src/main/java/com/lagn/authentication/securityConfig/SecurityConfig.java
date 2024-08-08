@@ -1,11 +1,13 @@
 package com.lagn.authentication.securityConfig;
 
-import com.lagn.authentication.model.Users;
+
+import com.lagn.authentication.customExceptions.dto.TokenDto;
 import com.lagn.authentication.securityConfig.authenticationFilter.CusomeAuthenticationFilter;
 import com.lagn.authentication.securityConfig.service.CustomUserDetailsService;
 import com.lagn.authentication.service.OAuthTwoUserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,14 +29,20 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 import java.sql.SQLException;
 
 @Configuration
 @EnableWebSecurity
+@Slf4j
 public class SecurityConfig {
 
     @Autowired
-    private  CusomeAuthenticationFilter cusomeAuthenticationFilter;
+    private CusomeAuthenticationFilter cusomeAuthenticationFilter;
     @Autowired
     private OAuthTwoUserService oAuthTwoUserService;
 
@@ -58,15 +66,16 @@ public class SecurityConfig {
                                                     Authentication authentication) throws IOException {
 
                     DefaultOidcUser oauthUser = (DefaultOidcUser) authentication.getPrincipal();
-                    if(response.getStatus()== HttpStatus.OK.value()) {
+                    TokenDto tokenDto = null;
+                    if (response.getStatus() == HttpStatus.OK.value()) {
                         try {
-                            Users auth2Users =
-                                    oAuthTwoUserService.createUserGoogleOAuth(oauthUser);
+                            tokenDto = oAuthTwoUserService.createUserGoogleOAuth(oauthUser);
+                            log.info("token from google :: {}", tokenDto.getToken());
                         } catch (SQLException e) {
                             throw new RuntimeException(e);
                         }
-                        response.addHeader("Authorization","Bearer "+oauthUser.getIdToken());
-                        response.sendRedirect("/user/update-password");
+//                        response.setHeader("Authorization", "Bearer " + tokenDto.getToken());
+                        response.sendRedirect("/user/validate-token?token=" + tokenDto.getToken());
                     }
                 }
             });
@@ -102,7 +111,6 @@ public class SecurityConfig {
         authProvider.setPasswordEncoder(passwordEncoder());
         return authProvider;
     }
-
 
 
 }

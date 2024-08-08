@@ -39,15 +39,16 @@ public class RestExceptionGlobalHandler {
         return new ResponseEntity<ApiExceptionDto>(apiExceptionDto, HttpStatus.BAD_REQUEST);
     }
 
+
     @ExceptionHandler(value = InvalidTokenException.class)
-    public ResponseEntity<ApiExceptionDto> invalidTokenException() {
-        ApiExceptionDto apiExceptionDto = new ApiExceptionDto(HttpStatus.UNAUTHORIZED, "Security Token is Not Valid");
+    public ResponseEntity<ApiExceptionDto> invalidTokenException(InvalidTokenException ex) {
+        ApiExceptionDto apiExceptionDto = new ApiExceptionDto(HttpStatus.UNAUTHORIZED, ex.getMessage());
         return new ResponseEntity<ApiExceptionDto>(apiExceptionDto, HttpStatus.UNAUTHORIZED);
     }
 
     @ExceptionHandler(value = UsernameNotFoundException.class)
-    public ResponseEntity<ApiExceptionDto> usernameNotFoundException() {
-        ApiExceptionDto apiExceptionDto = new ApiExceptionDto(HttpStatus.UNAUTHORIZED, "Bad Credential");
+    public ResponseEntity<ApiExceptionDto> usernameNotFoundException(UsernameNotFoundException e) {
+        ApiExceptionDto apiExceptionDto = new ApiExceptionDto(HttpStatus.UNAUTHORIZED, e.getMessage());
         return new ResponseEntity<ApiExceptionDto>(apiExceptionDto, HttpStatus.UNAUTHORIZED);
     }
 }

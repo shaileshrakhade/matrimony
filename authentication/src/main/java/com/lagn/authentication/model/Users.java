@@ -37,12 +37,12 @@ public class Users {
     private Date tokenGeneratorOn;
     private Date updateOn = new Date();
     private Date registerOn = new Date();
-    @Column(nullable = false)
+//    @Column(nullable = false)
     private Provider provider;
     @ColumnDefault("False")
     private boolean isVerified;
-    @ColumnDefault("True")
-    private boolean isActive;
+    private boolean isActive=true;
+    private String otp;
 
 
 }
