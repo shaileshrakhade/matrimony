@@ -23,8 +23,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        Optional<UserCredentialDto> user = userService.getUserByUserName(username);
+        Optional<UserCredentialDto> user = userService.getUserCredentialDtoByUserName(username);
         return user.map(CustomUserDetailsDto::new).orElseThrow(() -> new UsernameNotFoundException("Username or Password is incorrect..."));
-
     }
 }

@@ -72,9 +72,10 @@ public class SecurityConfig {
                             tokenDto = oAuthTwoUserService.createUserGoogleOAuth(oauthUser);
                             log.info("token from google :: {}", tokenDto.getToken());
                         } catch (SQLException e) {
-                            throw new RuntimeException(e);
+                            response.sendRedirect("/openapi/error?error" + e.getMessage());
+                            //throw new RuntimeException(e);
                         }
-//                        response.setHeader("Authorization", "Bearer " + tokenDto.getToken());
+                        //response.setHeader("Authorization", "Bearer " + tokenDto.getToken());
                         response.sendRedirect("/user/validate-token?token=" + tokenDto.getToken());
                     }
                 }

@@ -4,6 +4,7 @@ package com.lagn.authentication.service;
 import com.lagn.authentication.customExceptions.dto.TokenDto;
 import com.lagn.authentication.dao.UserDetailsDto;
 import com.lagn.authentication.enums.Provider;
+import com.lagn.authentication.enums.Role;
 import com.lagn.authentication.model.Users;
 import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,6 +33,7 @@ public class OAuthTwoUserService {
                 .gender(defaultOidcUser.getGender())
                 .provider(Provider.GOOGLE)
                 .address(mapToAddress(defaultOidcUser.getAddress()))
+                .roles(Role.USER)
                 .build();
         return userService.createUser(userDetailsDto);
 

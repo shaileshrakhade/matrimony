@@ -1,12 +1,12 @@
 package com.lagn.authentication.model;
 
 import com.lagn.authentication.enums.Provider;
+import com.lagn.authentication.enums.Role;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.antlr.v4.runtime.misc.NotNull;
 import org.hibernate.annotations.ColumnDefault;
 
 import java.util.Date;
@@ -37,12 +37,13 @@ public class Users {
     private Date tokenGeneratorOn;
     private Date updateOn = new Date();
     private Date registerOn = new Date();
-//    @Column(nullable = false)
+    //    @Column(nullable = false)
     private Provider provider;
     @ColumnDefault("False")
     private boolean isVerified;
-    private boolean isActive=true;
+    private boolean isActive;
     private String otp;
-
+    private Date otpExpiryOn;
+    private Role role;
 
 }

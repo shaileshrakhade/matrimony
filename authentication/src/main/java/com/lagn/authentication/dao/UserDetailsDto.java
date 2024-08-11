@@ -1,6 +1,7 @@
 package com.lagn.authentication.dao;
 
 import com.lagn.authentication.enums.Provider;
+import com.lagn.authentication.enums.Role;
 import jakarta.persistence.Column;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -11,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.ColumnDefault;
 
+import java.util.Collection;
 import java.util.Date;
 
 @Data
@@ -18,6 +20,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 public class UserDetailsDto {
+    private Long id;
     private String userName;
     private String phoneNumber;
     private String emailId;
@@ -29,4 +32,7 @@ public class UserDetailsDto {
     private Date updateOn;
     private Date tokenGeneratorOn;
     private Provider provider;
+    private String otp;
+    private Date otpExpiryOn;
+    private Role roles;
 }

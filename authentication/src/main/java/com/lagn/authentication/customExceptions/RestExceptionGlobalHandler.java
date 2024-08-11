@@ -1,6 +1,7 @@
 package com.lagn.authentication.customExceptions;
 
 import com.lagn.authentication.customExceptions.dto.ApiExceptionDto;
+import com.lagn.authentication.customExceptions.exceptions.InvalidOtpException;
 import com.lagn.authentication.customExceptions.exceptions.InvalidTokenException;
 import com.lagn.authentication.customExceptions.exceptions.UsernameAlreadyExistException;
 import org.springframework.http.HttpStatus;
@@ -18,6 +19,11 @@ import java.util.Locale;
 public class RestExceptionGlobalHandler {
     @ExceptionHandler(value = Exception.class)
     public ResponseEntity<ApiExceptionDto> exception(Exception e) {
+        ApiExceptionDto apiExceptionDto = new ApiExceptionDto(HttpStatus.BAD_REQUEST, e.getMessage());
+        return new ResponseEntity<ApiExceptionDto>(apiExceptionDto, HttpStatus.UNAUTHORIZED);
+    }
+    @ExceptionHandler(value = InvalidOtpException.class)
+    public ResponseEntity<ApiExceptionDto> invalidOtpException(InvalidOtpException e) {
         ApiExceptionDto apiExceptionDto = new ApiExceptionDto(HttpStatus.BAD_REQUEST, e.getMessage());
         return new ResponseEntity<ApiExceptionDto>(apiExceptionDto, HttpStatus.UNAUTHORIZED);
     }
