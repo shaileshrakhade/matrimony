@@ -7,7 +7,7 @@
 		<groupId>com.lang</groupId>
 		<version>1.0-SNAPSHOT</version>
 	</parent>
-	<groupId>com.lagn</groupId>
+	<groupId>com.sr</groupId>
 	<artifactId>authentication</artifactId>
 	<name>authentication</name>
 	<description>authentication provider</description>
