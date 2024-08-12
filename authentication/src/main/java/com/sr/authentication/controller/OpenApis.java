@@ -1,6 +1,6 @@
 package com.sr.authentication.controller;
 
-import com.sr.authentication.util.OtpVerification;
+import com.sr.authentication.service.OtpVerification;
 import jakarta.mail.MessagingException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/openapi/")
 @Slf4j
-public class OpenApi {
+public class OpenApis {
     @Autowired
     private OtpVerification otpVerification;
 

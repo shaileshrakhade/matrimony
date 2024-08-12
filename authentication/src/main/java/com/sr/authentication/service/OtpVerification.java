@@ -1,4 +1,4 @@
-package com.sr.authentication.util;
+package com.sr.authentication.service;
 
 import com.sr.authentication.customExceptions.exceptions.InvalidOtpException;
 

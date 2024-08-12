@@ -8,7 +8,7 @@ import com.sr.authentication.dao.UserDetailsDto;
 import com.sr.authentication.enums.Provider;
 import com.sr.authentication.enums.Role;
 import com.sr.authentication.service.UserService;
-import com.sr.authentication.util.OtpVerification;
+import com.sr.authentication.service.OtpVerification;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

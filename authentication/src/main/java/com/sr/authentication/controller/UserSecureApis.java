@@ -18,7 +18,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController()
 @RequestMapping("/")
 @RequiredArgsConstructor
-public class SecureApis {
+public class UserSecureApis {
 
     private final UserService userService;
 

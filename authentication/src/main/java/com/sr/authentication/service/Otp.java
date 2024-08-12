@@ -2,7 +2,6 @@ package com.sr.authentication.service;
 
 import com.sr.authentication.customExceptions.exceptions.InvalidOtpException;
 import com.sr.authentication.dao.UserDetailsDto;
-import com.sr.authentication.util.OtpVerification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

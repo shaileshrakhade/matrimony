@@ -11,9 +11,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController()
 @RequestMapping("/admin/")
 @RequiredArgsConstructor
-public class AdminApis {
+public class AdminController {
     @GetMapping("welcome")
     public String welcome() {
         return "Welcome to Admin Page";
+    }
+
+    @GetMapping("mark-admin")
+    public String markAdmin() {
+        return "markAdmin to Admin Page";
+    }
+
+    @GetMapping("active-user")
+    public String activeUser() {
+        return "activeUser to Admin Page";
     }
 }
