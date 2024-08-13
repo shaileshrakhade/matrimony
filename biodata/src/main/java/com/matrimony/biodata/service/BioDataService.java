@@ -1,6 +1,7 @@
 package com.matrimony.biodata.service;
 
 import com.matrimony.biodata.customExceptions.exceptions.BioDataAlreadyApproveException;
+import com.matrimony.biodata.customExceptions.exceptions.BioDataAlreadyExistException;
 import com.matrimony.biodata.customExceptions.exceptions.BioDataNotFoundException;
 import com.matrimony.biodata.dao.BioDataDao;
 import com.matrimony.biodata.model.BioData;
@@ -8,6 +9,8 @@ import com.matrimony.biodata.repo.BioDatRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 
 @Service
 @Slf4j
@@ -18,7 +21,7 @@ public class BioDataService implements BioDataOperations {
 
 
     @Override
-    public boolean approve(String id, boolean isApprove) throws BioDataNotFoundException {
+    public boolean approve(boolean isApprove, String id) throws BioDataNotFoundException {
         BioData bioData = bioDatRepo.findById(id).orElseThrow(() -> new BioDataNotFoundException("Bio-data is not exist"));
         bioData.setApprove(isApprove);
         bioDatRepo.save(bioData);
@@ -26,15 +29,14 @@ public class BioDataService implements BioDataOperations {
     }
 
     @Override
-    public BioDataDao show(String id, String username) throws BioDataNotFoundException {
-        BioData bioData = bioDatRepo.findByIdAndUsername(id, username).orElseThrow(() -> new BioDataNotFoundException("Bio-data is not exist"));
+    public List<BioDataDao> show() {
+        return bioDatRepo.findAll()
+                .stream().map(bioData -> BioDataDao.builder()
+                        .id(bioData.getId())
+                        .fullName(bioData.getFullName())
+                        .isApprove(bioData.isApprove())
+                        .build()).toList();
 
-        return BioDataDao.builder()
-                .id(bioData.getId())
-                .username(bioData.getUsername())
-                .fullName(bioData.getFullName())
-                .isApprove(bioData.isApprove())
-                .build();
     }
 
     @Override
@@ -43,30 +45,64 @@ public class BioDataService implements BioDataOperations {
 
         return BioDataDao.builder()
                 .id(bioData.getId())
-                .username(bioData.getUsername())
                 .fullName(bioData.getFullName())
                 .isApprove(bioData.isApprove())
                 .build();
     }
 
     @Override
-    public String add(BioDataDao bioDataDao) {
-        BioData data = BioData.builder()
-                .username(bioDataDao.getUsername())
-                .fullName(bioDataDao.getFullName())
-                .isApprove(false)
-                .build();
+    public BioDataDao showByUsername(String username) throws BioDataNotFoundException {
+        BioData bioData = bioDatRepo.findByUsername(username).orElseThrow(() -> new BioDataNotFoundException("Bio-data is not exist"));
 
-        return bioDatRepo.save(data).getId();
+        return BioDataDao.builder()
+                .id(bioData.getId())
+                .fullName(bioData.getFullName())
+                .isApprove(bioData.isApprove())
+                .build();
     }
 
     @Override
-    public String update(BioDataDao bioDataDao, String id) throws BioDataNotFoundException, BioDataAlreadyApproveException {
-        BioData bioData = bioDatRepo.findById(id).orElseThrow(() -> new BioDataNotFoundException("Bio-data is not exist"));
+    public BioDataDao add(BioDataDao bioDataDao, String username) throws BioDataAlreadyExistException {
+
+        if (bioDatRepo.findByUsername(username).isPresent()) {
+            throw new BioDataAlreadyExistException("Bio-data is already with this username exist");
+        } else {
+            BioData bioData = BioData.builder()
+                    .username(username)
+                    .fullName(bioDataDao.getFullName())
+                    .isApprove(false)
+                    .build();
+
+            bioData = bioDatRepo.save(bioData);
+            return BioDataDao.builder()
+                    .id(bioData.getId())
+                    .fullName(bioData.getFullName())
+                    .isApprove(bioData.isApprove())
+                    .build();
+
+
+        }
+    }
+
+    @Override
+    public BioDataDao update(BioDataDao bioDataDao, String username, String id) throws BioDataNotFoundException, BioDataAlreadyApproveException {
+        BioData bioData = bioDatRepo.findByIdAndUsername(id, username).orElseThrow(() -> new BioDataNotFoundException("Bio-data is not exist"));
         if (!bioData.isApprove()) {
             bioData.setFullName(bioDataDao.getFullName());
-            return bioDatRepo.save(bioData).getId();
+
+            bioData = bioDatRepo.save(bioData);
+            return BioDataDao.builder()
+                    .id(bioData.getId())
+                    .fullName(bioData.getFullName())
+                    .isApprove(bioData.isApprove())
+                    .build();
         }
         throw new BioDataAlreadyApproveException("Bio data is already approved");
+    }
+
+    @Override
+    public boolean delete(String id) {
+        bioDatRepo.deleteById(id);
+        return true;
     }
 }

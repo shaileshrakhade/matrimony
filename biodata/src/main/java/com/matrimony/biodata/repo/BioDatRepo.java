@@ -7,4 +7,6 @@ import java.util.Optional;
 
 public interface BioDatRepo extends MongoRepository<BioData,String > {
     Optional<BioData> findByIdAndUsername(String id, String username);
+
+    Optional<BioData> findByUsername(String username);
 }
