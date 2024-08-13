@@ -173,9 +173,8 @@ public class UserService {
 
     public String generateToken(String username) {
         Optional<Users> useroptional = userRepository.findByUserName(username);
-        Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put("project", "marriage");
-        String token = jwtService.generateToken(extraClaims, customUserDetailsService.loadUserByUsername(username));
+
+        String token = jwtService.generateToken(customUserDetailsService.loadUserByUsername(username));
 
         if (useroptional.isPresent()) {
             Users user = useroptional.get();

@@ -24,9 +24,8 @@ public class Users {
     private long id;
     @Column(unique = true)
     private String userName;
-    @Column(length = 10)
+    @Column(unique = true, length = 10)
     private String phoneNumber;
-    //    @Column(unique = true, nullable = false)
     private String emailId;
     private String password;
     private String fullName;
@@ -37,7 +36,6 @@ public class Users {
     private Date tokenGeneratorOn;
     private Date updateOn = new Date();
     private Date registerOn = new Date();
-    //    @Column(nullable = false)
     private Provider provider;
     @ColumnDefault("False")
     private boolean isVerified;

@@ -4,10 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class BiodataApplication {
+public class BioDataApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(BiodataApplication.class, args);
+		SpringApplication.run(BioDataApplication.class, args);
 	}
 
 }
