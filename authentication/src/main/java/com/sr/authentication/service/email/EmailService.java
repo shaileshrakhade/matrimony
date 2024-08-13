@@ -1,8 +1,8 @@
-package com.sr.authentication.service;
+package com.sr.authentication.service.email;
 
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -12,13 +12,14 @@ import org.springframework.stereotype.Service;
 import java.io.File;
 
 @Service
-public class EmailService {
+@RequiredArgsConstructor
+//@Async
+public class EmailService implements Email {
 
-    @Autowired
-    private JavaMailSender mailSender;
-
+    private final JavaMailSender mailSender;
 
     //send email to  multiple emails with attachment
+    @Override
     public void sendEmail(String subject, String body, String attachmentName, String attachmentPath, String... email) throws MessagingException {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = new MimeMessageHelper(message, true);
@@ -34,7 +35,8 @@ public class EmailService {
     }
 
     //send email to  single email
-    @Async
+    @Override
+
     public void sendEmail(String subject, String body, String... email) {
         MimeMessage message = mailSender.createMimeMessage();
         MimeMessageHelper helper = null;

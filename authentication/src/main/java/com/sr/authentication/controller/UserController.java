@@ -8,10 +8,11 @@ import com.sr.authentication.dao.UserDetailsDto;
 import com.sr.authentication.enums.Provider;
 import com.sr.authentication.enums.Role;
 import com.sr.authentication.service.UserService;
-import com.sr.authentication.service.OtpVerification;
+import com.sr.authentication.service.otp.Otp;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -23,14 +24,20 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 @RestController
-@RequiredArgsConstructor
 @Slf4j
 @RequestMapping("/user/")
 public class UserController {
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
-    private final OtpVerification otpVerification;
+    @Qualifier("emailOtp")
+    private final Otp otp;
+
+    public UserController(UserService userService, AuthenticationManager authenticationManager, Otp otp) {
+        this.userService = userService;
+        this.authenticationManager = authenticationManager;
+        this.otp = otp;
+    }
 
     @PostMapping("register")
     @ResponseStatus(HttpStatus.OK)
@@ -83,12 +90,14 @@ public class UserController {
 
     @GetMapping("send-otp")
     @ResponseStatus(HttpStatus.OK)
+
     public String senOtp(@RequestBody UserCredentialDto userCredentialDto) {
         UserDetailsDto userDetailsDto = userService.getUserByUserName(userCredentialDto.getUserName())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
         if (!userDetailsDto.getEmailId().isEmpty()) {
-            otpVerification.generateOtp(userCredentialDto.getUserName());
-            otpVerification.sendOtpOnMail(userDetailsDto.getFullName(),userDetailsDto.getEmailId());
+            String otpNumber = otp.generateOtp(userCredentialDto.getUserName());
+            boolean isSend = otp.senOtp(otpNumber);
+//            otp.sendOtpOnMail(userDetailsDto.getFullName(), userDetailsDto.getEmailId());
             return "OTP Send Successfully";
         } else {
             return "email Id was not register with this username";
@@ -98,7 +107,7 @@ public class UserController {
     @GetMapping("forgot-password")
     @ResponseStatus(HttpStatus.OK)
     public TokenDto forgoPassword(@RequestBody UserCredentialDto userCredentialDto) throws InvalidOtpException {
-        if (otpVerification.validateOtp(userCredentialDto.getUserName(),userCredentialDto.getOtp())) {
+        if (otp.validateOtp(userCredentialDto.getUserName(), userCredentialDto.getOtp())) {
             TokenDto tokenDto = new TokenDto();
             tokenDto.setToken(userService.generateToken(userCredentialDto.getUserName()));
             tokenDto.setMessage("OTP Validation Success");
