@@ -22,11 +22,4 @@ public class OpenApis {
     public void error(@RequestParam("error") String error) throws Exception {
         throw new Exception(error);
     }
-
-    @GetMapping("send-otp")
-    @ResponseStatus(HttpStatus.OK)
-    public String senOtp() throws MessagingException {
-//        otpVerification.sendOtp("shailesh15.sr@gmail.com");
-        return "email send successfully";
-    }
 }

@@ -4,7 +4,6 @@ package com.matrimony.biodata.controller;
 import com.matrimony.biodata.customExceptions.exceptions.BioDataNotFoundException;
 import com.matrimony.biodata.dao.BioDataDao;
 import com.matrimony.biodata.service.BioDataService;
-import com.matrimony.biodata.util.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -14,14 +13,13 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/admin/bio-data/")
-public class AdminController {
+public class BioDataAdminController {
 
     private final BioDataService bioDataService;
-    private final JwtService jwtService;
+//    private final JwtService jwtService;
 
-    public AdminController(@Qualifier("bioDataServiceImpl") BioDataService bioDataService, JwtService jwtService) {
+    public BioDataAdminController(@Qualifier("bioDataServiceImpl") BioDataService bioDataService) {
         this.bioDataService = bioDataService;
-        this.jwtService = jwtService;
     }
 
     @GetMapping("should-approve")
@@ -39,16 +37,16 @@ public class AdminController {
     @PutMapping("should-update/{isUpdate}/{id}/{comments}")
     @ResponseStatus(HttpStatus.OK)
     public boolean shouldUpdate(HttpServletRequest request, @PathVariable("isUpdate") boolean isUpdate, @PathVariable("id") String id, @PathVariable("comments") String comments) throws BioDataNotFoundException {
-        String username = jwtService.extractUsername(request.getHeader("Authorization"));
-        return bioDataService.shouldUpdate(isUpdate, id, comments, username);
+//        String username = jwtService.extractUsername(request.getHeader("Authorization"));
+        return bioDataService.shouldUpdate(isUpdate, id, comments, "username");
     }
 
     @PutMapping("approve/{isApprove}/{id}")
     @ResponseStatus(HttpStatus.OK)
     public boolean Approve(HttpServletRequest request, @PathVariable("isApprove") boolean isApprove, @PathVariable("id") String id) throws BioDataNotFoundException {
 
-        String username = jwtService.extractUsername(request.getHeader("Authorization"));
-        return bioDataService.approve(isApprove, id, username);
+//        String username = jwtService.extractUsername(request.getHeader("Authorization"));
+        return bioDataService.approve(isApprove, id, "username");
     }
 
     @DeleteMapping("delete/{id}")

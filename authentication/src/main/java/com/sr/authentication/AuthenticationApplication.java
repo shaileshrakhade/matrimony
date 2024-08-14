@@ -33,7 +33,8 @@ public class AuthenticationApplication {
         users.setPassword(passwordEncoder.encode("admin"));
         users.setProvider(Provider.LOCAL);
         users.setFullName("admin");
-        users.setEmailId("shailesh.sr@gmail.com");
+        users.setEmailId("admin.sr@gmail.com");
+        users.setPhoneNumber("9100000000");
         users.setActive(true);
         users.setRole(Role.ADMIN);
         try {

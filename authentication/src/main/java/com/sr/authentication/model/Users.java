@@ -29,16 +29,10 @@ public class Users {
     private String emailId;
     private String password;
     private String fullName;
-    private String whatsAppNo;
-    private String birthDate;
-    private String address;
-    private String gender;
     private Date tokenGeneratorOn;
     private Date updateOn = new Date();
     private Date registerOn = new Date();
     private Provider provider;
-    @ColumnDefault("False")
-    private boolean isVerified;
     private boolean isActive;
     private String otp;
     private Date otpExpiryOn;

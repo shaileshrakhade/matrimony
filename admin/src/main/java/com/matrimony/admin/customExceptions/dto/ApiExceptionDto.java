@@ -1,4 +1,4 @@
-package com.sr.authentication.customExceptions.dto;
+package com.matrimony.admin.customExceptions.dto;
 
 import lombok.Data;
 import org.springframework.http.HttpStatus;

@@ -1,4 +1,4 @@
-package com.sr.authentication.util;
+package com.sr.authentication.util.jwt;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.function.Function;
 
 @Service
-public class JwtService {
+public class JwtServiceImpl implements JwtService {
     @Value("${security.jwt.secret-key}")
     private String secretKey;
     @Value("${security.jwt.expiration-time}")
@@ -26,27 +26,46 @@ public class JwtService {
     @Value("${spring.application.description}")
     private String projectDescription;
 
-    public String extractUsername(String token) {
+    @Override
+    public String valueFromToken(String token, String value) {
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
         return extractClaim(token, Claims::getSubject);
     }
 
-
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+    @Override
+    public String extractUsername(String token) {
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+        return extractClaim(token, Claims::getSubject);
     }
 
+    @Override
     public String generateToken(UserDetails userDetails) {
         return generateToken(new HashMap<>(), userDetails);
     }
 
-    public String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
+    @Override
+    public boolean isTokenValid(String token, UserDetails userDetails) {
+        final String username = extractUsername(token);
+        return (username.equals(userDetails.getUsername())) && isTokenExpired(token);
+    }
+
+    private <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
+        final Claims claims = extractAllClaims(token);
+        return claimsResolver.apply(claims);
+    }
+
+
+    private String generateToken(Map<String, Object> extraClaims, UserDetails userDetails) {
         extraClaims.put("project", projectName);
         extraClaims.put("projectDesc", projectDescription);
         return buildToken(extraClaims, userDetails, jwtExpiration);
     }
 
-    public long getExpirationTime() {
+    private long getExpirationTime() {
         return jwtExpiration;
     }
 
@@ -65,12 +84,8 @@ public class JwtService {
                 .compact();
     }
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return (username.equals(userDetails.getUsername())) && isTokenExpired(token);
-    }
 
-    public boolean isTokenExpired(String token) {
+    private boolean isTokenExpired(String token) {
         return !extractExpiration(token).before(new Date());
     }
 

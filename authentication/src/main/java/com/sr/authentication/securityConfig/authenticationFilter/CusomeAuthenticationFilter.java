@@ -2,7 +2,7 @@ package com.sr.authentication.securityConfig.authenticationFilter;
 
 
 import com.sr.authentication.securityConfig.service.CustomUserDetailsService;
-import com.sr.authentication.util.JwtService;
+import com.sr.authentication.util.jwt.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package com.sr.authentication.customExceptions.dto;
+package com.sr.authentication.dao;
 
 import lombok.Data;
 

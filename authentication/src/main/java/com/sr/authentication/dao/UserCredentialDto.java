@@ -13,7 +13,6 @@ import lombok.NoArgsConstructor;
 public class UserCredentialDto {
     private String userName;
     private String password;
-    private String otp;
     private Role role;
     private  boolean isActive;
 

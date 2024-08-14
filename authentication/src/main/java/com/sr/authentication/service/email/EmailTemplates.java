@@ -1,4 +1,4 @@
-package com.sr.authentication.util;
+package com.sr.authentication.service.email;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,16 +7,16 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 import org.springframework.util.FileCopyUtils;
 
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+import java.util.Date;
 
 @Service
 @Slf4j
-public class EmailTemplate {
+public class EmailTemplates {
     @Autowired
     private ResourceLoader resourceLoader;
 
@@ -30,6 +30,10 @@ public class EmailTemplate {
             String content = new String(data, StandardCharsets.UTF_8);
             content = content.replace("{OTP_VERIFICATION_USERNAME}", username);
             content = content.replace("{OTP_VERIFICATION_CODE}", otp);
+
+            DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("E, MMM dd yyyy");
+
+            content = content.replace("{DATE_SEND}", LocalDateTime.now().format(myFormatObj));
             return content;
         } catch (IOException e) {
             throw new RuntimeException("otp template not found ::" + e);
