@@ -1,0 +1,57 @@
+server:
+  port: 8080
+## Product Service Route
+spring:
+  application:
+    name: API-GATEWAY
+  cloud:
+    gateway:
+      routes:
+        ## Discovery Service Static Route
+        - id: DISCOVERY-SERVICE-STATIC
+          uri: http://admin:admin@${app.eureka-server}:8761
+          predicates:
+            - Path=/eureka/**
+
+        ## Discovery Service Route request is eureka/web then move it to
+        - id: DISCOVERY-SERVICE
+          uri: http://admin:admin@${app.eureka-server}:8761
+          predicates:
+            - Path=/eureka/web
+          # directly route moving from one URL to the base url [we pass http://localhost:8080/eureka/web & it move to http://localhost:8761]
+          filters:
+            - SetPath=/
+
+        ## Authentication Service Route
+        - id: AUTHENTICATION-SERVICE
+          uri: lb://AUTHENTICATION-SERVICE
+          predicates:
+            - Path=/user/**, /secure/**, /openapi/**, /admin/**
+
+        ## ADMIN-SERVICE Route
+        - id: ADMIN-SERVICE
+          uri: lb://ADMIN-SERVICE
+          predicates:
+            - Path=/admin/**
+          filters:
+            - AuthenticationFilter
+
+        ## BIODATA-SERVICE Service Route
+        - id: BIODATA-SERVICE
+          uri: lb://BIODATA-SERVICE
+          predicates:
+            - Path=/bio-data/**
+          filters:
+            - AuthenticationFilter
+
+        ## FAVORITE-SERVICE  Route
+        - id: FAVORITE-SERVICE
+          uri: lb://FAVORITE-SERVICE
+          predicates:
+            - Path=/favorite/**
+          filters:
+            - AuthenticationFilter
+
+
+
+

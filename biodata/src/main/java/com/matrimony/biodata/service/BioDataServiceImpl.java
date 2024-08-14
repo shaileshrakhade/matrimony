@@ -159,7 +159,7 @@ public class BioDataServiceImpl implements BioDataService {
                     .mamkul(bioDataDao.getMamkul())
                     .picUrl(bioDataDao.getPicUrl())
                     .paymentUrl(bioDataDao.getPaymentUrl())
-                    .comment(bioDataDao.getComment())
+                    .comment("Application Submitted! it will review & approved soon...")
                     .isUpdate(false)
                     .isApprove(false)
                     .build();
@@ -220,6 +220,7 @@ public class BioDataServiceImpl implements BioDataService {
             bioData.setMamkul(bioDataDao.getMamkul());
             bioData.setPicUrl(bioDataDao.getPicUrl());
             bioData.setPaymentUrl(bioDataDao.getPaymentUrl());
+            bioData.setComment("Application Updated! it will review & approved soon...");
             bioData.setUpdate(false);
             bioData = bioDatRepo.save(bioData);
             return BioDataDao.builder()

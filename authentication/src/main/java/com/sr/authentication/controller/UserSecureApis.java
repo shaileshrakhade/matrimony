@@ -8,6 +8,7 @@ import com.sr.authentication.util.jwt.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -19,7 +20,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController()
-@RequestMapping("/")
+@RequestMapping("/secure/")
 @RequiredArgsConstructor
 public class UserSecureApis {
 
@@ -43,7 +44,7 @@ public class UserSecureApis {
     @GetMapping("profile")
     @ResponseStatus(HttpStatus.OK)
     public UserDetailsDto profile(HttpServletRequest request) {
-        String username = jwtService.extractUsername(request.getHeader("Authorization"));
+        String username = jwtService.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
         return userService.getUserByUserName(username);
     }
 

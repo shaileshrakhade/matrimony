@@ -9,6 +9,7 @@ import com.sr.authentication.model.Users;
 import com.sr.authentication.repo.UserRepository;
 import com.sr.authentication.securityConfig.service.CustomUserDetailsService;
 import com.sr.authentication.util.jwt.JwtService;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Optional;
 
 
@@ -34,7 +36,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Optional<UserCredentialDto> getUserCredentialDtoByUserName(String username) {
-        return userRepository.findByUserNameOrPhoneNumber(username,username).map(user -> {
+        return userRepository.findByUserNameOrPhoneNumber(username, username).map(user -> {
             return UserCredentialDto.builder()
                     .userName(user.getUserName())
                     .password(user.getPassword())
@@ -42,6 +44,26 @@ public class UserServiceImpl implements UserService {
                     .isActive(user.isActive())
                     .build();
         });
+    }
+
+    @Override
+    public List<UserDetailsDto> getAllUser() {
+        return userRepository.findAll().stream().map(users -> {
+                    return UserDetailsDto.builder()
+                            .id(users.getId())
+                            .userName(users.getUserName())
+                            .phoneNumber(users.getPhoneNumber())
+                            .emailId(users.getEmailId())
+                            .fullName(users.getFullName())
+                            .updateOn(users.getUpdateOn())
+                            .tokenGeneratorOn(users.getTokenGeneratorOn())
+                            .provider(users.getProvider())
+                            .otp(users.getOtp())
+                            .roles(users.getRole())
+                            .build();
+
+                }
+        ).toList();
     }
 
     @Override
@@ -65,7 +87,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetailsDto getUserByUserName(String username) throws UsernameNotFoundException {
-        return userRepository.findByUserNameOrPhoneNumber(username,username).map(users -> {
+        return userRepository.findByUserNameOrPhoneNumber(username, username).map(users -> {
             return UserDetailsDto.builder()
                     .id(users.getId())
                     .userName(users.getUserName())
@@ -83,6 +105,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional
     public String passwordUpdate(UserCredentialDto UserCredentialDto) {
         Optional<Users> useroptional = userRepository.findByUserName(UserCredentialDto.getUserName());
         if (useroptional.isPresent()) {
@@ -94,6 +117,7 @@ public class UserServiceImpl implements UserService {
         }
     }
 
+    @Override
     public String activeUser(UserCredentialDto UserCredentialDto) {
         Users users = userRepository.findByUserName(UserCredentialDto.getUserName()).orElseThrow(() -> new UsernameNotFoundException("User Name not exist"));
         users.setPassword(passwordEncoder.encode(UserCredentialDto.getPassword()));
@@ -127,7 +151,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public TokenDto createUser(UserDetailsDto userDetailsDto) throws UsernameAlreadyExistException {
-        if (userRepository.findByUserNameOrPhoneNumber(userDetailsDto.getUserName(),userDetailsDto.getPhoneNumber()).isPresent()) {
+        if (userRepository.findByUserNameOrPhoneNumber(userDetailsDto.getUserName(), userDetailsDto.getPhoneNumber()).isPresent()) {
             throw new UsernameAlreadyExistException("Account is already exist With this Mobile Number Or Email");
         } else {
             Users user = Users.builder()
@@ -156,8 +180,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean deleteUser(Long userId, String username) {
+    @Transactional
+    public long deleteUser(Long userId, String username) {
         return userRepository.deleteByIdAndUserName(userId, username);
+    }
+
+    @Override
+    public boolean deActiveUser(Long userId, String username) {
+        Users users = userRepository.findByIdAndUserName(userId, username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        users.setActive(false);
+        userRepository.save(users);
+        return true;
 
     }
 

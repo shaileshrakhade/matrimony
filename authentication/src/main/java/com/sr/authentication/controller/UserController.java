@@ -11,11 +11,11 @@ import com.sr.authentication.enums.Provider;
 import com.sr.authentication.enums.Role;
 import com.sr.authentication.service.UserService;
 import com.sr.authentication.service.otp.EmailOtpImpl;
-import com.sr.authentication.service.otp.OtpService;
 import com.sr.authentication.util.jwt.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -53,7 +53,7 @@ public class UserController {
     @PutMapping("active")
     @ResponseStatus(HttpStatus.OK)
     public String activeUser(@RequestBody UserCredentialDto userCredentialDto, HttpServletRequest request) throws InvalidTokenException {
-        String username = jwtService.extractUsername(request.getHeader("Authorization"));
+        String username = jwtService.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
 
         if (userCredentialDto.getUserName().equals(username)) {
             userCredentialDto.setUserName(username);
@@ -68,7 +68,7 @@ public class UserController {
     @PutMapping("update")
     @ResponseStatus(HttpStatus.OK)
     public UserDetailsDto updateUser(@RequestBody UserDetailsDto userDetailsDto, HttpServletRequest request) throws PhoneNumberAlreadyExistException, InvalidTokenException {
-        String username = jwtService.extractUsername(request.getHeader("Authorization"));
+        String username = jwtService.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
         if (username.equals(userDetailsDto.getUserName()))
             return userService.updateUser(userDetailsDto, username);
         else
@@ -107,12 +107,12 @@ public class UserController {
         }
     }
 
-    @GetMapping("forgot-password/{otp}")
+    @GetMapping("forgot-password")
     @ResponseStatus(HttpStatus.OK)
-    public TokenDto forgoPassword(@RequestBody UserCredentialDto userCredentialDto, @RequestParam("otp") String otp) throws InvalidOtpException, InvalidTokenException {
-        if (emailOtp.validateOtp(userCredentialDto.getUserName(), otp)) {
+    public TokenDto forgoPassword(@RequestParam("username") String username, @RequestParam("otp") String otp) throws InvalidOtpException, InvalidTokenException {
+        if (emailOtp.validateOtp(username, otp)) {
             TokenDto tokenDto = new TokenDto();
-            tokenDto.setToken(userService.generateToken(userCredentialDto.getUserName()));
+            tokenDto.setToken(userService.generateToken(username));
             tokenDto.setMessage("OTP Validation Success");
             return tokenDto;
         } else {
@@ -124,7 +124,7 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public String updatePassword(@RequestBody UserCredentialDto userCredentialDto, HttpServletRequest request) throws InvalidTokenException {
 
-        String username = jwtService.extractUsername(request.getHeader("Authorization"));
+        String username = jwtService.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
         if (userCredentialDto.getUserName().equals(username)) {
             userCredentialDto.setUserName(username);
             return "password successfully update :: "
@@ -149,12 +149,11 @@ public class UserController {
 
     }
 
-    @DeleteMapping("delete/{userId}")
+    @DeleteMapping("de-active/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public Boolean deleteUser(@PathVariable Long userId, HttpServletRequest request) {
-
-        String username = jwtService.extractUsername(request.getHeader("Authorization"));
-        return userService.deleteUser(userId, username);
+        String username = jwtService.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
+        return userService.deActiveUser(userId, username);
 
     }
 }
