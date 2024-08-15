@@ -5,6 +5,9 @@ import com.matrimony.biodata.customExceptions.exceptions.BioDataAlreadyExistExce
 import com.matrimony.biodata.customExceptions.exceptions.BioDataNotFoundException;
 import com.matrimony.biodata.customExceptions.exceptions.BioDataUpdateException;
 import com.matrimony.biodata.dao.BioDataDao;
+import com.matrimony.biodata.masters.exceptions.MasterAttributesNotFoundException;
+import com.matrimony.biodata.masters.service.MasterService;
+import com.matrimony.biodata.masters.util.Constants;
 import com.matrimony.biodata.service.BioDataService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -20,17 +23,22 @@ public class BioDataController {
     @Autowired
     @Qualifier("bioDataServiceImpl")
     private BioDataService bioDataService;
+    @Autowired
+    private MasterService masterService;
 
     @GetMapping("show")
     @ResponseStatus(HttpStatus.OK)
-    public List<BioDataDao> show() throws BioDataNotFoundException {
-        return bioDataService.show(true);
+    public List<BioDataDao> show() throws BioDataNotFoundException, MasterAttributesNotFoundException {
+        if (masterService.isPublish())
+            return bioDataService.show(true);
+        else
+            throw new BioDataNotFoundException(masterService.show(Constants.BIO_DATA_NOT_PUBLISH_MSG).getValue());
     }
 
     @GetMapping("show/{id}")
     @ResponseStatus(HttpStatus.OK)
     public BioDataDao show(@PathVariable("id") String id) throws BioDataNotFoundException {
-        return bioDataService.show(id,true);
+        return bioDataService.show(id, true);
     }
 
     @GetMapping("is-present/{id}")

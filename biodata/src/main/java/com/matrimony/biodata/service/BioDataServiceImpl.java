@@ -140,7 +140,7 @@ public class BioDataServiceImpl implements BioDataService {
         } else {
             BioData bioData = BioData.builder()
                     .id(bioDataDao.getId())
-                    .username(bioDataDao.getUsername())
+                    .username(username)
                     .fullName(bioDataDao.getFullName())
                     .phoneNumber(bioDataDao.getPhoneNumber())
                     .alternateNumber(bioDataDao.getAlternateNumber())

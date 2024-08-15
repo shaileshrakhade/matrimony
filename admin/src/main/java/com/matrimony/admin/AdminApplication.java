@@ -1,8 +1,10 @@
 package com.matrimony.admin;
 
-import com.matrimony.admin.model.Admin;
-import com.matrimony.admin.repo.AdminRepo;
-import com.matrimony.admin.util.Constants;
+import com.matrimony.admin.masters.dao.MasterDao;
+import com.matrimony.admin.masters.model.Master;
+import com.matrimony.admin.masters.repo.MasterRepo;
+import com.matrimony.admin.masters.service.MasterService;
+import com.matrimony.admin.masters.util.Constants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -22,18 +24,15 @@ public class AdminApplication {
 
     //consonant attributes will add
     @Autowired
-    private AdminRepo adminRepo;
+    private MasterService masterService;
 
     @Bean
     public String defaultAttributesAdding() {
-		List<Admin> adminList=new ArrayList<>();
-		adminList.add(0, Admin.builder().key(Constants.IS_BIO_DATA_PUBLISH).value(String.valueOf(false)).build());
-        adminList.add(0, Admin.builder().key(Constants.DEFAULT_NOTIFICATION).value("Application Starting soon...").build());
-        adminList.add(0, Admin.builder().key(Constants.DASHBOARD_MESSAGE).value("Welcome to Matrimony").build());
-        adminList.add(0, Admin.builder().key(Constants.BIO_DATA_PDF_FILE_URL).value("").build());
         try {
-            adminRepo.saveAll(adminList);
-            return "BIO_DATA_PDF_FILE_URL attributes was added";
+            masterService.add(MasterDao.builder().key(Constants.DEFAULT_NOTIFICATION).value("Application Starting soon...").build());
+            masterService.add(MasterDao.builder().key(Constants.DASHBOARD_MESSAGE).value("Welcome to Matrimony").build());
+            masterService.add(MasterDao.builder().key(Constants.BIO_DATA_PDF_FILE_URL).value("/bio-data.pdf").build());
+
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }

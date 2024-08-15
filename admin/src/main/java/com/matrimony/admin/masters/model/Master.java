@@ -1,15 +1,18 @@
-package com.matrimony.admin.model;
+package com.matrimony.admin.masters.model;
 
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(value = "admin")
+@Document(value = "master")
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 @Data
-public class Admin {
+public class Master {
     @Id
     private String id;
     private String key;

@@ -37,7 +37,7 @@ public class AdminController {
         return "activeUser to Admin Page";
     }
 
-    @GetMapping("users")
+    @GetMapping("all-users")
     public List<UserDetailsDto> allUsers() {
         return userService.getAllUser();
     }

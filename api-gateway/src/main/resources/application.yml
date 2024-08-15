@@ -32,7 +32,7 @@ spring:
         - id: ADMIN-SERVICE
           uri: lb://ADMIN-SERVICE
           predicates:
-            - Path=/admin/**
+            - Path=/master-attribute/**
           filters:
             - AuthenticationFilter
 
