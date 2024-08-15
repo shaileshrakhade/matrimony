@@ -19,10 +19,6 @@ public class UserDetailsDto {
     private String phoneNumber;
     private String emailId;
     private String fullName;
-    private String whatsAppNo;
-    private String birthDate;
-    private String address;
-    private String gender;
     private Date updateOn;
     private Date tokenGeneratorOn;
     private Provider provider;

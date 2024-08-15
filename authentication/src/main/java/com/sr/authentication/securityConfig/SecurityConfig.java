@@ -1,7 +1,8 @@
 package com.sr.authentication.securityConfig;
 
 
-import com.sr.authentication.customExceptions.dto.TokenDto;
+import com.sr.authentication.dao.TokenDto;
+import com.sr.authentication.customExceptions.exceptions.UsernameAlreadyExistException;
 import com.sr.authentication.enums.Role;
 import com.sr.authentication.securityConfig.authenticationFilter.CusomeAuthenticationFilter;
 import com.sr.authentication.securityConfig.service.CustomUserDetailsService;
@@ -30,7 +31,6 @@ import org.springframework.security.web.authentication.AuthenticationSuccessHand
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
-import java.sql.SQLException;
 
 @Configuration
 @EnableWebSecurity
@@ -68,7 +68,7 @@ public class SecurityConfig {
                         try {
                             tokenDto = oAuthTwoUserService.createUserGoogleOAuth(oauthUser);
                             log.info("token from google :: {}", tokenDto.getToken());
-                        } catch (SQLException e) {
+                        } catch (UsernameAlreadyExistException e) {
                             response.sendRedirect("/openapi/error?error" + e.getMessage());
                             //throw new RuntimeException(e);
                         }

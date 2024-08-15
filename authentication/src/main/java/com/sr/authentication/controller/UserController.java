@@ -1,17 +1,21 @@
 package com.sr.authentication.controller;
 
-import com.sr.authentication.customExceptions.dto.TokenDto;
+import com.sr.authentication.dao.TokenDto;
 import com.sr.authentication.customExceptions.exceptions.InvalidOtpException;
 import com.sr.authentication.customExceptions.exceptions.InvalidTokenException;
+import com.sr.authentication.customExceptions.exceptions.PhoneNumberAlreadyExistException;
+import com.sr.authentication.customExceptions.exceptions.UsernameAlreadyExistException;
 import com.sr.authentication.dao.UserCredentialDto;
 import com.sr.authentication.dao.UserDetailsDto;
 import com.sr.authentication.enums.Provider;
 import com.sr.authentication.enums.Role;
 import com.sr.authentication.service.UserService;
-import com.sr.authentication.service.OtpVerification;
+import com.sr.authentication.service.otp.EmailOtpImpl;
+import com.sr.authentication.util.jwt.JwtService;
 import jakarta.servlet.http.HttpServletRequest;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
+import lombok.Data;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -19,33 +23,38 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
-import java.sql.SQLException;
 
 @RestController
-@RequiredArgsConstructor
-@Slf4j
 @RequestMapping("/user/")
+
 public class UserController {
 
     private final UserService userService;
     private final AuthenticationManager authenticationManager;
-    private final OtpVerification otpVerification;
+    private final JwtService jwtService;
+    private final EmailOtpImpl emailOtp;
+
+    public UserController(UserService userService, AuthenticationManager authenticationManager, JwtService jwtService, EmailOtpImpl emailOtp) {
+        this.userService = userService;
+        this.authenticationManager = authenticationManager;
+        this.jwtService = jwtService;
+        this.emailOtp = emailOtp;
+    }
 
     @PostMapping("register")
     @ResponseStatus(HttpStatus.OK)
-    public TokenDto registerUser(@RequestBody UserDetailsDto userDetails) throws SQLException, IOException {
+    public TokenDto registerUser(@RequestBody UserDetailsDto userDetails) throws UsernameAlreadyExistException {
         userDetails.setProvider(Provider.LOCAL);
         userDetails.setRoles(Role.USER);
         return userService.createUser(userDetails);
     }
 
+    //set the password of user & active the account
     @PutMapping("active")
     @ResponseStatus(HttpStatus.OK)
     public String activeUser(@RequestBody UserCredentialDto userCredentialDto, HttpServletRequest request) throws InvalidTokenException {
-        String token = request.getHeader("Authorization");
-        final String jwtToken = token.substring(7);
-        String username = userService.valueFromToken(jwtToken, "username");
+        String username = jwtService.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
+
         if (userCredentialDto.getUserName().equals(username)) {
             userCredentialDto.setUserName(username);
             userCredentialDto.setActive(true);
@@ -58,12 +67,12 @@ public class UserController {
 
     @PutMapping("update")
     @ResponseStatus(HttpStatus.OK)
-    public UserDetailsDto updateUser(HttpServletRequest request) throws InvalidTokenException {
-        String token = request.getHeader("Authorization");
-        final String jwtToken = token.substring(7);
-        String username = userService.valueFromToken(jwtToken, "username");
-        UserDetailsDto userCredentialDto = userService.getUserByUserName(username).orElseThrow(() -> new InvalidTokenException("User Not valid"));
-        return userService.updateUser(userCredentialDto);
+    public UserDetailsDto updateUser(@RequestBody UserDetailsDto userDetailsDto, HttpServletRequest request) throws PhoneNumberAlreadyExistException, InvalidTokenException {
+        String username = jwtService.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
+        if (username.equals(userDetailsDto.getUserName()))
+            return userService.updateUser(userDetailsDto, username);
+        else
+            throw new InvalidTokenException("Token is invalid");
     }
 
     @GetMapping("login")
@@ -72,8 +81,9 @@ public class UserController {
         Authentication authentication = authenticationManager
                 .authenticate(new UsernamePasswordAuthenticationToken(userCredential.getUserName(), userCredential.getPassword()));
         if (authentication.isAuthenticated()) {
+            UserDetailsDto userDetailsDto = userService.getUserByUserName(userCredential.getUserName());
             TokenDto tokenDto = new TokenDto();
-            tokenDto.setToken(userService.generateToken(userCredential.getUserName()));
+            tokenDto.setToken(userService.generateToken(userDetailsDto.getUserName()));
             tokenDto.setMessage("Login Successful.");
             return tokenDto;
         } else {
@@ -84,11 +94,13 @@ public class UserController {
     @GetMapping("send-otp")
     @ResponseStatus(HttpStatus.OK)
     public String senOtp(@RequestBody UserCredentialDto userCredentialDto) {
-        UserDetailsDto userDetailsDto = userService.getUserByUserName(userCredentialDto.getUserName())
-                .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        UserDetailsDto userDetailsDto = userService.getUserByUserName(userCredentialDto.getUserName());
         if (!userDetailsDto.getEmailId().isEmpty()) {
-            otpVerification.generateOtp(userCredentialDto.getUserName());
-            otpVerification.sendOtpOnMail(userDetailsDto.getFullName(),userDetailsDto.getEmailId());
+            String otpNumber = emailOtp.generateOtp(userCredentialDto.getUserName());
+//            emailOtp.setOtp(otpNumber);
+            emailOtp.setEmail(userDetailsDto.getEmailId());
+            emailOtp.setUsername(userDetailsDto.getFullName());
+            boolean isSend = emailOtp.senOtp(otpNumber);
             return "OTP Send Successfully";
         } else {
             return "email Id was not register with this username";
@@ -97,10 +109,10 @@ public class UserController {
 
     @GetMapping("forgot-password")
     @ResponseStatus(HttpStatus.OK)
-    public TokenDto forgoPassword(@RequestBody UserCredentialDto userCredentialDto) throws InvalidOtpException {
-        if (otpVerification.validateOtp(userCredentialDto.getUserName(),userCredentialDto.getOtp())) {
+    public TokenDto forgoPassword(@RequestParam("username") String username, @RequestParam("otp") String otp) throws InvalidOtpException, InvalidTokenException {
+        if (emailOtp.validateOtp(username, otp)) {
             TokenDto tokenDto = new TokenDto();
-            tokenDto.setToken(userService.generateToken(userCredentialDto.getUserName()));
+            tokenDto.setToken(userService.generateToken(username));
             tokenDto.setMessage("OTP Validation Success");
             return tokenDto;
         } else {
@@ -111,9 +123,8 @@ public class UserController {
     @PutMapping("update-password")
     @ResponseStatus(HttpStatus.OK)
     public String updatePassword(@RequestBody UserCredentialDto userCredentialDto, HttpServletRequest request) throws InvalidTokenException {
-        String token = request.getHeader("Authorization");
-        final String jwtToken = token.substring(7);
-        String username = userService.valueFromToken(jwtToken, "username");
+
+        String username = jwtService.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
         if (userCredentialDto.getUserName().equals(username)) {
             userCredentialDto.setUserName(username);
             return "password successfully update :: "
@@ -127,10 +138,8 @@ public class UserController {
     @ResponseStatus(HttpStatus.OK)
     public TokenDto refreshToken(@RequestParam("token") String jwtToken) throws InvalidTokenException {
         TokenDto tokenDto = new TokenDto();
-//        String token = request.getHeader("Authorization");
-//        final String jwtToken = token.substring(7);
-        String username = userService.valueFromToken(jwtToken, "username");
-        if (userService.validateToken(jwtToken)) {
+        String username = jwtService.extractUsername(jwtToken);
+        if (userService.isTokenValid(jwtToken, username)) {
             tokenDto.setToken(userService.generateToken(username));
             tokenDto.setMessage("token is validate and refresh");
             return tokenDto;
@@ -140,20 +149,11 @@ public class UserController {
 
     }
 
-
-    @DeleteMapping("delete/{userId}")
+    @DeleteMapping("de-active/{userId}")
     @ResponseStatus(HttpStatus.OK)
     public Boolean deleteUser(@PathVariable Long userId, HttpServletRequest request) {
-        String token = request.getHeader("Authorization");
-        final String jwtToken = token.substring(7);
-        String usernameFromToken = userService.valueFromToken(jwtToken, "username");
-        String usernameFromId = userService.getUserByUserId(userId).orElseThrow(() -> new UsernameNotFoundException("user not fpund")).getUserName();
+        String username = jwtService.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
+        return userService.deActiveUser(userId, username);
 
-        if (usernameFromId.equals(usernameFromToken)) {
-            return userService.deleteUser(userId);
-        } else {
-            //admin can delete
-            return false;
-        }
     }
 }

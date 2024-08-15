@@ -2,9 +2,13 @@ package com.sr.authentication.controller;
 
 import com.sr.authentication.customExceptions.exceptions.InvalidTokenException;
 
+import com.sr.authentication.dao.UserDetailsDto;
 import com.sr.authentication.service.UserService;
+import com.sr.authentication.util.jwt.JwtService;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -16,11 +20,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RestController()
-@RequestMapping("/")
+@RequestMapping("/secure/")
 @RequiredArgsConstructor
 public class UserSecureApis {
 
     private final UserService userService;
+    private final JwtService jwtService;
 
     @GetMapping("welcome")
     @ResponseStatus(HttpStatus.OK)
@@ -30,7 +35,7 @@ public class UserSecureApis {
 
     @GetMapping("me")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> authenticatedUser() throws InvalidTokenException {
+    public ResponseEntity<Object> authenticatedUser() {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Object currentUser = authentication.getPrincipal();
         return ResponseEntity.ok(currentUser);
@@ -38,11 +43,9 @@ public class UserSecureApis {
 
     @GetMapping("profile")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> profile() throws InvalidTokenException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Object currentUser = authentication.getPrincipal();
-        userService.getUserByUserName("");
-        return ResponseEntity.ok(currentUser);
+    public UserDetailsDto profile(HttpServletRequest request) {
+        String username = jwtService.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
+        return userService.getUserByUserName(username);
     }
 
 

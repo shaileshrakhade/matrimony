@@ -24,23 +24,15 @@ public class Users {
     private long id;
     @Column(unique = true)
     private String userName;
-    @Column(length = 10)
+    @Column(unique = true, length = 10)
     private String phoneNumber;
-    //    @Column(unique = true, nullable = false)
     private String emailId;
     private String password;
     private String fullName;
-    private String whatsAppNo;
-    private String birthDate;
-    private String address;
-    private String gender;
     private Date tokenGeneratorOn;
     private Date updateOn = new Date();
     private Date registerOn = new Date();
-    //    @Column(nullable = false)
     private Provider provider;
-    @ColumnDefault("False")
-    private boolean isVerified;
     private boolean isActive;
     private String otp;
     private Date otpExpiryOn;

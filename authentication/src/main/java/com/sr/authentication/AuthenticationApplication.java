@@ -7,6 +7,7 @@ import com.sr.authentication.repo.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -14,6 +15,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import java.sql.SQLException;
 
 @SpringBootApplication
+@EnableDiscoveryClient
 @EnableAsync
 public class AuthenticationApplication {
 
@@ -33,7 +35,8 @@ public class AuthenticationApplication {
         users.setPassword(passwordEncoder.encode("admin"));
         users.setProvider(Provider.LOCAL);
         users.setFullName("admin");
-        users.setEmailId("shailesh.sr@gmail.com");
+        users.setEmailId("admin.sr@gmail.com");
+        users.setPhoneNumber("9100000000");
         users.setActive(true);
         users.setRole(Role.ADMIN);
         try {

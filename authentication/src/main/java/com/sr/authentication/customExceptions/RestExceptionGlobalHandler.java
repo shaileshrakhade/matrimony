@@ -1,8 +1,9 @@
 package com.sr.authentication.customExceptions;
 
-import com.sr.authentication.customExceptions.dto.ApiExceptionDto;
+import com.sr.authentication.customExceptions.dao.ApiExceptionDto;
 import com.sr.authentication.customExceptions.exceptions.InvalidOtpException;
 import com.sr.authentication.customExceptions.exceptions.InvalidTokenException;
+import com.sr.authentication.customExceptions.exceptions.PhoneNumberAlreadyExistException;
 import com.sr.authentication.customExceptions.exceptions.UsernameAlreadyExistException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +22,7 @@ public class RestExceptionGlobalHandler {
         ApiExceptionDto apiExceptionDto = new ApiExceptionDto(HttpStatus.BAD_REQUEST, e.getMessage());
         return new ResponseEntity<ApiExceptionDto>(apiExceptionDto, HttpStatus.UNAUTHORIZED);
     }
+
     @ExceptionHandler(value = InvalidOtpException.class)
     public ResponseEntity<ApiExceptionDto> invalidOtpException(InvalidOtpException e) {
         ApiExceptionDto apiExceptionDto = new ApiExceptionDto(HttpStatus.BAD_REQUEST, e.getMessage());
@@ -39,8 +41,14 @@ public class RestExceptionGlobalHandler {
     }
 
     @ExceptionHandler(value = UsernameAlreadyExistException.class)
-    public ResponseEntity<ApiExceptionDto> UsernameAlreadyExistException() {
-        ApiExceptionDto apiExceptionDto = new ApiExceptionDto(HttpStatus.IM_USED, "Mobile Number is already exist! Please try a login.");
+    public ResponseEntity<ApiExceptionDto> UsernameAlreadyExistException(UsernameAlreadyExistException e) {
+        ApiExceptionDto apiExceptionDto = new ApiExceptionDto(HttpStatus.IM_USED, e.getMessage());
+        return new ResponseEntity<ApiExceptionDto>(apiExceptionDto, HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(value = PhoneNumberAlreadyExistException.class)
+    public ResponseEntity<ApiExceptionDto> PhoneNumberAlreadyExistException(PhoneNumberAlreadyExistException e) {
+        ApiExceptionDto apiExceptionDto = new ApiExceptionDto(HttpStatus.IM_USED, e.getMessage());
         return new ResponseEntity<ApiExceptionDto>(apiExceptionDto, HttpStatus.BAD_REQUEST);
     }
 
