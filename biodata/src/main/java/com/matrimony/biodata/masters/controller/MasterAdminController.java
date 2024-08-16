@@ -43,6 +43,11 @@ public class MasterAdminController {
         masterDao.setValue(String.valueOf(flg));
         return masterService.update(masterDao);
     }
+    @DeleteMapping("delete/{key}")
+    @ResponseStatus(HttpStatus.OK)
+    public boolean delete(@PathVariable("key") String key) throws MasterAttributesNotFoundException {
+        return masterService.delete(key);
+    }
 
 
 }

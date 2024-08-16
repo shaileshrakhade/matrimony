@@ -17,7 +17,7 @@ public class MasterPublicController {
 
     @GetMapping("show/{key}")
     @ResponseStatus(HttpStatus.OK)
-    public MasterDao show(@RequestParam("key") String key) throws MasterAttributesNotFoundException {
+    public MasterDao show(@PathVariable("key") String key) throws MasterAttributesNotFoundException {
         return masterService.show(key);
     }
 
@@ -26,5 +26,6 @@ public class MasterPublicController {
     public boolean isPublish() throws MasterAttributesNotFoundException {
         return masterService.isPublish();
     }
+
 
 }

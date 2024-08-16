@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "c3560ae9-84ff-44a9-8d08-a34160a96d06",
-		"name": "lagn",
+		"name": "matrimony",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "37115999"
 	},
@@ -27,12 +27,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/openapi/welcome",
+					"raw": "http://localhost:8080/openapi/welcome",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"openapi",
 						"welcome"
@@ -62,12 +62,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/openapi/error?error=not valid",
+					"raw": "http://localhost:8080/openapi/error?error=not valid",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"openapi",
 						"error"
@@ -83,7 +83,7 @@
 			"response": []
 		},
 		{
-			"name": "/user/register",
+			"name": "user/register",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -100,12 +100,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/user/register",
+					"raw": "http://localhost:8080/user/register",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"user",
 						"register"
@@ -115,7 +115,7 @@
 			"response": []
 		},
 		{
-			"name": "/user/active",
+			"name": "user/active",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -139,12 +139,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/user/active",
+					"raw": "http://localhost:8080/user/active",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"user",
 						"active"
@@ -154,7 +154,7 @@
 			"response": []
 		},
 		{
-			"name": "/user/update",
+			"name": "user/update",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -170,7 +170,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"id\": 1,\r\n    \"userName\": \"admin\",\r\n    \"phoneNumber\": \"9922265169\",\r\n    \"emailId\": \"shailesh15.sr@gmail.com\",\r\n    \"fullName\": \"admin\"\r\n}",
+					"raw": "{ \r\n    \"userName\": \"admin\",\r\n    \"phoneNumber\": \"9922265169\",\r\n    \"emailId\": \"shailesh15.sr@gmail.com\",\r\n    \"fullName\": \"admin\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -178,12 +178,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/user/update",
+					"raw": "http://localhost:8080/user/update",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"user",
 						"update"
@@ -193,7 +193,7 @@
 			"response": []
 		},
 		{
-			"name": "/user/send-otp",
+			"name": "user/send-otp",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -213,12 +213,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/user/send-otp",
+					"raw": "http://localhost:8080/user/send-otp",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"user",
 						"send-otp"
@@ -228,7 +228,7 @@
 			"response": []
 		},
 		{
-			"name": "/user/forgot-password",
+			"name": "user/forgot-password?otp=017584&username=admin",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -240,7 +240,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"userName\":\"admin\",\r\n    \"otp\":\"875215\"\r\n}",
+					"raw": "",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -248,7 +248,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/user/forgot-password",
+					"raw": "http://localhost:8080/user/forgot-password?otp=017584&username=admin",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -257,6 +257,16 @@
 					"path": [
 						"user",
 						"forgot-password"
+					],
+					"query": [
+						{
+							"key": "otp",
+							"value": "017584"
+						},
+						{
+							"key": "username",
+							"value": "admin"
+						}
 					]
 				}
 			},
@@ -272,7 +282,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"userName\":\"9922265169\",\r\n    \"password\":\"admin\"\r\n    \r\n}",
+					"raw": "{\r\n    \"userName\":\"bhargavijoshi98@gmail.com\",\r\n    \"password\":\"bhargavijoshi98@gmail.com\"\r\n    \r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -280,12 +290,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/user/login",
+					"raw": "http://localhost:8080/user/login",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
 						"user",
 						"login"
@@ -295,14 +305,14 @@
 			"response": []
 		},
 		{
-			"name": "/user/update-password",
+			"name": "user/update-password",
 			"request": {
 				"auth": {
 					"type": "bearer",
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{adminToken}}",
+							"value": "{{admin}}",
 							"type": "string"
 						}
 					]
@@ -334,10 +344,99 @@
 			"response": []
 		},
 		{
-			"name": "/user/forgot-password Copy",
+			"name": "user/validate-token/token=?",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
 			"request": {
 				"auth": {
 					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/validate-token?token=eyJhbGciOiJIUzI1NiJ9.eyJwcm9qZWN0IjoiQVVUSEVOVElDQVRJT04tU0VSVklDRSIsInByb2plY3REZXNjIjoiQXV0aGVudGljYXRpb24gb2YgTWF0cmltb255IEFwcGxpY2F0aW9uIiwic3ViIjoiYWRtaW4iLCJpYXQiOjE3MjM2NDY2MTQsImV4cCI6MTcyMzY4MjYxNH0.rPy0gsatF0nxA918WGJU-w5NXZ8z3kJw9OIC8bUFIXE",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"validate-token"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJwcm9qZWN0IjoiQVVUSEVOVElDQVRJT04tU0VSVklDRSIsInByb2plY3REZXNjIjoiQXV0aGVudGljYXRpb24gb2YgTWF0cmltb255IEFwcGxpY2F0aW9uIiwic3ViIjoiYWRtaW4iLCJpYXQiOjE3MjM2NDY2MTQsImV4cCI6MTcyMzY4MjYxNH0.rPy0gsatF0nxA918WGJU-w5NXZ8z3kJw9OIC8bUFIXE"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/de-active/{userId}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{shailesh2019}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/de-active/2/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"de-active",
+						"2",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin/delete/{userId}/{username}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin}}",
+							"type": "string"
+						}
+					]
 				},
 				"method": "DELETE",
 				"header": [],
@@ -351,151 +450,24 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/user/delete/2",
+					"raw": "http://localhost:8080/admin/delete/2/shailesh2019.sr@gmail.com",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8080",
 					"path": [
-						"user",
+						"admin",
 						"delete",
-						"2"
+						"2",
+						"shailesh2019.sr@gmail.com"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "/validate-token/token=?",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "noauth"
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/user/validate-token?token=eyJhbGciOiJIUzI1NiJ9.eyJwcm9qZWN0IjoibWFycmlhZ2UiLCJzdWIiOiJzaGFpbGVzaDIwMTkuc3JAZ21haWwuY29tIiwiaWF0IjoxNzIzMzUxNDcxLCJleHAiOjE3MjMzODc0NzF9.Tletl3FJDCGqty3sox_MCWCYiw9wO60GGr0odlw0htA",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"user",
-						"validate-token"
-					],
-					"query": [
-						{
-							"key": "token",
-							"value": "{{token}}",
-							"disabled": true
-						},
-						{
-							"key": "token",
-							"value": "eyJhbGciOiJIUzI1NiJ9.eyJwcm9qZWN0IjoibWFycmlhZ2UiLCJzdWIiOiJzaGFpbGVzaDIwMTkuc3JAZ21haWwuY29tIiwiaWF0IjoxNzIzMzUxNDcxLCJleHAiOjE3MjMzODc0NzF9.Tletl3FJDCGqty3sox_MCWCYiw9wO60GGr0odlw0htA"
-						}
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/welcome",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/welcome",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"welcome"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/me",
-			"protocolProfileBehavior": {
-				"disableBodyPruning": true
-			},
-			"request": {
-				"auth": {
-					"type": "bearer",
-					"bearer": [
-						{
-							"key": "token",
-							"value": "{{token}}",
-							"type": "string"
-						}
-					]
-				},
-				"method": "GET",
-				"header": [],
-				"body": {
-					"mode": "raw",
-					"raw": "",
-					"options": {
-						"raw": {
-							"language": "json"
-						}
-					}
-				},
-				"url": {
-					"raw": "http://localhost:8080/me",
-					"protocol": "http",
-					"host": [
-						"localhost"
-					],
-					"port": "8080",
-					"path": [
-						"me"
-					]
-				}
-			},
-			"response": []
-		},
-		{
-			"name": "/profile",
+			"name": "admin/users",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -522,27 +494,35 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8081/profile",
+					"raw": "http://localhost:8080/admin/all-users",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8081",
+					"port": "8080",
 					"path": [
-						"profile"
+						"admin",
+						"all-users"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "bio-data/show",
+			"name": "secure/welcome",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
 			"request": {
 				"auth": {
-					"type": "noauth"
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin}}",
+							"type": "string"
+						}
+					]
 				},
 				"method": "GET",
 				"header": [],
@@ -556,12 +536,138 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/bio-data/show",
+					"raw": "http://localhost:8080/secure/welcome",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8083",
+					"port": "8080",
+					"path": [
+						"secure",
+						"welcome"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "secure/me",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/secure/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"secure",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "secure/profile",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/secure/profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"secure",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/show",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/show",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
 					"path": [
 						"bio-data",
 						"show"
@@ -578,7 +684,14 @@
 			},
 			"request": {
 				"auth": {
-					"type": "noauth"
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
 				},
 				"method": "GET",
 				"header": [],
@@ -592,16 +705,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/bio-data/show/66baeeb4ff4b947e87b52dc8",
+					"raw": "http://localhost:8080/bio-data/show/66bca7d131eb0a0b647eea0e",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8083",
+					"port": "8080",
 					"path": [
 						"bio-data",
 						"show",
-						"66baeeb4ff4b947e87b52dc8"
+						"66bca7d131eb0a0b647eea0e"
 					]
 				}
 			},
@@ -615,7 +728,14 @@
 			},
 			"request": {
 				"auth": {
-					"type": "noauth"
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
 				},
 				"method": "GET",
 				"header": [],
@@ -629,12 +749,12 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/bio-data/is-present/66baeeb4ff4b947e87b52dc8",
+					"raw": "http://localhost:8080/bio-data/is-present/66baeeb4ff4b947e87b52dc8",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8083",
+					"port": "8080",
 					"path": [
 						"bio-data",
 						"is-present",
@@ -665,7 +785,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/bio-data/admin",
+					"raw": "http://localhost:8083/bio-data/bhargavijoshi98@gmail.com",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -673,7 +793,7 @@
 					"port": "8083",
 					"path": [
 						"bio-data",
-						"admin"
+						"bhargavijoshi98@gmail.com"
 					]
 				}
 			},
@@ -683,13 +803,20 @@
 			"name": "bio-data/add/{username}",
 			"request": {
 				"auth": {
-					"type": "noauth"
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
 				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\"fullName\":\"shailesh rakhade\"\r\n}",
+					"raw": "{\r\n    \"fullName\": \"shailesh rakhade\",\r\n    \"phoneNumber\": \"9130429439\",\r\n    \"alternateNumber\": \"9130429439\",\r\n    \"birthDate\": \"25021998\",\r\n    \"birthPlace\": \"ner\",\r\n    \"height\": \"5.2\",\r\n    \"gotra\": \"kashp\",\r\n    \"gan\": \"dev\",\r\n    \"nstrakhan\": null,\r\n    \"nadi\": null,\r\n    \"bloodGroup\": null,\r\n    \"qualification\": null,\r\n    \"job\": null,\r\n    \"familyInformation\": null,\r\n    \"address\": null,\r\n    \"mamkul\": null,\r\n    \"picUrl\": null,\r\n    \"paymentUrl\": null\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -697,16 +824,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/bio-data/add/admin",
+					"raw": "http://localhost:8080/bio-data/add/bhargavijoshi98@gmail.com",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8083",
+					"port": "8080",
 					"path": [
 						"bio-data",
 						"add",
-						"admin"
+						"bhargavijoshi98@gmail.com"
 					]
 				}
 			},
@@ -722,7 +849,7 @@
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n\"fullName\":\"shailesh\"\r\n}",
+					"raw": "{\r\n    \"id\": \"66bca7d131eb0a0b647eea0e\",\r\n    \"username\": \"bhargavijoshi98@gmail.com\",\r\n    \"fullName\": \"Bhargavi Joshi\",\r\n    \"phoneNumber\": \"9130429439\",\r\n    \"alternateNumber\": \"9130429439\",\r\n    \"birthDate\": \"25021998\",\r\n    \"birthPlace\": \"ner\",\r\n    \"height\": \"5.2\",\r\n    \"gotra\": \"kashp\",\r\n    \"gan\": \"dev\",\r\n    \"nstrakhan\": null,\r\n    \"nadi\": null,\r\n    \"bloodGroup\": null,\r\n    \"qualification\": null,\r\n    \"job\": null,\r\n    \"familyInformation\": null,\r\n    \"address\": null,\r\n    \"mamkul\": null,\r\n    \"picUrl\": null,\r\n    \"paymentUrl\": null\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -730,7 +857,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/bio-data/update/admin/66baeeb4ff4b947e87b52dc8",
+					"raw": "http://localhost:8083/bio-data/update/bhargavijoshi98@gmail.com/66bca7d131eb0a0b647eea0e",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -739,15 +866,146 @@
 					"path": [
 						"bio-data",
 						"update",
-						"admin",
-						"66baeeb4ff4b947e87b52dc8"
+						"bhargavijoshi98@gmail.com",
+						"66bca7d131eb0a0b647eea0e"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "admin/bio-data/approve/{isApprove}/{id}",
+			"name": "bio-data/admin/not-approved",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/admin/not-approved",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"bio-data",
+						"not-approved"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/not-approved/{id}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/admin/not-approved/{id}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"bio-data",
+						"not-approved",
+						"{id}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/approved",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/admin/approved",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"",
+						"admin",
+						"bio-data",
+						"approved"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/approved/{is-approve}/{id}",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -764,7 +1022,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/admin/bio-data/approve/true/66baeeb4ff4b947e87b52dc8",
+					"raw": "http://localhost:8083/bio-data/admin/approved/{is-approve}/{id}",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -773,19 +1031,26 @@
 					"path": [
 						"admin",
 						"bio-data",
-						"approve",
-						"true",
-						"66baeeb4ff4b947e87b52dc8"
+						"approved",
+						"{is-approve}",
+						"{id}"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "admin/bio-data/should-update/{isUpdate}/{id}/{comments}",
+			"name": "bio-data/admin/need-update/{is-update}/{id}/{comments}",
 			"request": {
 				"auth": {
-					"type": "noauth"
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
 				},
 				"method": "PUT",
 				"header": [],
@@ -799,7 +1064,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/admin/bio-data/should-update/true/66baeeb4ff4b947e87b52dc8/mobile number not valid",
+					"raw": "http://localhost:8083/bio-data/admin/need-update/true/66bca7d131eb0a0b647eea0e/update name",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -808,17 +1073,17 @@
 					"path": [
 						"admin",
 						"bio-data",
-						"should-update",
+						"need-update",
 						"true",
-						"66baeeb4ff4b947e87b52dc8",
-						"mobile number not valid"
+						"66bca7d131eb0a0b647eea0e",
+						"update name"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "admin/bio-data/delete/{id}",
+			"name": "bio-data/admin/delete/{id}",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -835,7 +1100,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8083/admin/bio-data/delete/66baeeb4ff4b947e87b52dc8",
+					"raw": "http://localhost:8083/bio-data/admin/delete/66baeeb4ff4b947e87b52dc8",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -852,7 +1117,7 @@
 			"response": []
 		},
 		{
-			"name": "admin/attributes/show-all",
+			"name": "bio-data/master-attribute/show/{key}",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -872,7 +1137,80 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/admin/attributes/show-all",
+					"raw": "http://localhost:8083/bio-data/master-attribute/show/66baeeb4ff4b947e87b52dc8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"bio-data",
+						"master-attribute",
+						"show",
+						"66baeeb4ff4b947e87b52dc8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/master-attribute/is-publish",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/bio-data/master-attribute/is-publish",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"bio-data",
+						"master-attribute",
+						"is-publish"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/master-attribute/show-all",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/bio-data/admin/master-attribute/show-all",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -880,7 +1218,8 @@
 					"port": "8082",
 					"path": [
 						"admin",
-						"attributes",
+						"bio-data",
+						"master-attribute",
 						"show-all"
 					]
 				}
@@ -888,16 +1227,23 @@
 			"response": []
 		},
 		{
-			"name": "admin/attributes/add",
+			"name": "bio-data/admin/master-attribute/add",
 			"request": {
 				"auth": {
-					"type": "noauth"
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
 				},
 				"method": "POST",
 				"header": [],
 				"body": {
 					"mode": "raw",
-					"raw": "{\r\n    \"key\":\"\",\r\n    \"value\":\"\"\r\n}",
+					"raw": "{\r\n    \"key\":\"sdr\",\r\n    \"value\":\"test\"\r\n}",
 					"options": {
 						"raw": {
 							"language": "json"
@@ -905,15 +1251,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/admin/attributes/add",
+					"raw": "http://localhost:8083/bio-data/admin/master-attribute/add",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8082",
+					"port": "8083",
 					"path": [
 						"admin",
-						"attributes",
+						"bio-data",
+						"master-attribute",
 						"add"
 					]
 				}
@@ -921,7 +1268,7 @@
 			"response": []
 		},
 		{
-			"name": "admin/attributes/update",
+			"name": "bio-data/admin/master-attribute/add",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -938,7 +1285,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/admin/attributes/update",
+					"raw": "http://localhost:8082/master-attribute/admin/add",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -946,15 +1293,15 @@
 					"port": "8082",
 					"path": [
 						"admin",
-						"attributes",
-						"update"
+						"master-attribute",
+						"add"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "admin/attributes/make-publish/{publish}",
+			"name": "bio-data/admin/master-attribute/update",
 			"request": {
 				"auth": {
 					"type": "noauth"
@@ -971,7 +1318,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/admin/attributes/make-publish/{publish}",
+					"raw": "http://localhost:8082/bio-data/admin/master-attribute/update",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -979,16 +1326,84 @@
 					"port": "8082",
 					"path": [
 						"admin",
-						"attributes",
-						"make-publish",
-						"{publish}"
+						"bio-data",
+						"master-attribute",
+						"update"
 					]
 				}
 			},
 			"response": []
 		},
 		{
-			"name": "admin/attributes/show/{key}",
+			"name": "master-attribute/admin/update",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"key\":\"\",\r\n    \"value\":\"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/master-attribute/admin/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"admin",
+						"master-attribute",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/master-attribute/make-publish/{flg}",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/bio-data/admin/master-attribute/make-publish/true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"admin",
+						"bio-data",
+						"master-attribute",
+						"make-publish",
+						"true"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "master-attribute/show/{key}",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -1008,15 +1423,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/admin/attributes/show/{key}",
+					"raw": "http://localhost:8082/master-attribute/show/{key}",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8082",
 					"path": [
-						"admin",
-						"attributes",
+						"master-attribute",
 						"show",
 						"{key}"
 					]
@@ -1025,7 +1439,7 @@
 			"response": []
 		},
 		{
-			"name": "admin/attributes/bio-data-pdf-url",
+			"name": "master-attribute/bio-data-pdf-url",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -1045,15 +1459,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/admin/attributes/bio-data-pdf-url",
+					"raw": "http://localhost:8082/master-attribute/bio-data-pdf-url",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8082",
 					"path": [
-						"admin",
-						"attributes",
+						"master-attribute",
 						"bio-data-pdf-url"
 					]
 				}
@@ -1061,7 +1474,7 @@
 			"response": []
 		},
 		{
-			"name": "admin/attributes/dashboard-message",
+			"name": "master-attribute/dashboard-message",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -1081,15 +1494,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/admin/attributes/dashboard-message",
+					"raw": "http://localhost:8082/master-attribute/dashboard-message",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8082",
 					"path": [
-						"admin",
-						"attributes",
+						"master-attribute",
 						"dashboard-message"
 					]
 				}
@@ -1097,7 +1509,7 @@
 			"response": []
 		},
 		{
-			"name": "admin/attributes/notification-message",
+			"name": "master-attribute/notification-message",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -1117,15 +1529,14 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/admin/attributes/notification-message",
+					"raw": "http://localhost:8082/master-attribute/notification-message",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
 					"port": "8082",
 					"path": [
-						"admin",
-						"attributes",
+						"master-attribute",
 						"notification-message"
 					]
 				}
@@ -1133,7 +1544,7 @@
 			"response": []
 		},
 		{
-			"name": "admin/attributes/is-publish",
+			"name": "master-attribute/admin/show-all",
 			"protocolProfileBehavior": {
 				"disableBodyPruning": true
 			},
@@ -1153,7 +1564,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/admin/attributes/is-publish",
+					"raw": "http://localhost:8082/master-attribute/admin/show-all",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1161,8 +1572,8 @@
 					"port": "8082",
 					"path": [
 						"admin",
-						"attributes",
-						"is-publish"
+						"master-attribute",
+						"show-all"
 					]
 				}
 			},

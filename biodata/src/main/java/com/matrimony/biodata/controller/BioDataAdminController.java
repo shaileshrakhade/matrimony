@@ -41,21 +41,21 @@ public class BioDataAdminController {
 
     @PutMapping("need-update/{is-update}/{id}/{comments}")
     @ResponseStatus(HttpStatus.OK)
-    public boolean shouldUpdate(HttpServletRequest request, @PathVariable("is-update") boolean isUpdate, @PathVariable("id") String id, @PathVariable("comments") String comments) throws BioDataNotFoundException {
+    public BioDataDao shouldUpdate(HttpServletRequest request, @PathVariable("is-update") boolean isUpdate, @PathVariable("id") String id, @PathVariable("comments") String comments) throws BioDataNotFoundException {
 //        String username = jwtService.extractUsername(request.getHeader("Authorization"));
         return bioDataService.shouldUpdate(isUpdate, id, comments, "username");
     }
 
     @PutMapping("approved/{is-approve}/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public boolean Approve(HttpServletRequest request, @PathVariable("is-approve") boolean isApprove, @PathVariable("id") String id) throws BioDataNotFoundException {
+    public BioDataDao Approve(HttpServletRequest request, @PathVariable("is-approve") boolean isApprove, @PathVariable("id") String id) throws BioDataNotFoundException {
 //        String username = jwtService.extractUsername(request.getHeader("Authorization"));
         return bioDataService.approve(isApprove, id, "username");
     }
 
     @DeleteMapping("delete/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public boolean update(@PathVariable("id") String id) {
+    public boolean update(@PathVariable("id") String id) throws BioDataNotFoundException {
         return bioDataService.delete(id);
     }
 

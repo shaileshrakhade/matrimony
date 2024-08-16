@@ -5,6 +5,7 @@ import com.sr.authentication.customExceptions.exceptions.PhoneNumberAlreadyExist
 import com.sr.authentication.customExceptions.exceptions.UsernameAlreadyExistException;
 import com.sr.authentication.dao.UserCredentialDto;
 import com.sr.authentication.dao.UserDetailsDto;
+import com.sr.authentication.enums.Role;
 
 import java.util.List;
 import java.util.Optional;
@@ -32,7 +33,9 @@ public interface UserService {
 
     public boolean isTokenValid(String token, String username);
 
-    public long deleteUser(Long userId, String username);
+    public boolean deleteUser(Long userId, String username);
 
     public boolean deActiveUser(Long userId, String username);
+
+    public UserDetailsDto markAdmin(Role role, String username);
 }

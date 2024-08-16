@@ -2,7 +2,8 @@ package com.sr.authentication.securityConfig.authenticationFilter;
 
 
 import com.sr.authentication.securityConfig.service.CustomUserDetailsService;
-import com.sr.authentication.util.jwt.JwtService;
+import com.sr.authentication.util.jwt.JwtClaims;
+import com.sr.authentication.util.jwt.JwtTokenGenerate;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -27,7 +28,9 @@ import java.io.IOException;
 public class CusomeAuthenticationFilter extends OncePerRequestFilter {
 
     private final HandlerExceptionResolver handlerExceptionResolver;
-    private final JwtService jwtService;
+    private final JwtClaims jwtClaims;
+    private final JwtTokenGenerate jwtTokenGenerate;
+
     private final CustomUserDetailsService customUserDetailsService;
 
     @Override
@@ -43,14 +46,14 @@ public class CusomeAuthenticationFilter extends OncePerRequestFilter {
 
         try {
             final String jwt = authHeader.substring(7);
-            final String userEmail = jwtService.extractUsername(jwt);
+            final String userEmail = jwtClaims.extractUsername(jwt);
 
             Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
             if (userEmail != null && authentication == null) {
                 UserDetails userDetails = this.customUserDetailsService.loadUserByUsername(userEmail);
 
-                if (jwtService.isTokenValid(jwt, userDetails)) {
+                if (jwtTokenGenerate.isTokenValid(jwt, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                             userDetails,
                             null,

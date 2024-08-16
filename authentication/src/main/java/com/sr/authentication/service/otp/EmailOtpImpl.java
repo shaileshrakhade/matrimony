@@ -4,10 +4,12 @@ import com.sr.authentication.service.email.EmailService;
 import com.sr.authentication.service.email.EmailTemplates;
 import com.sr.authentication.util.Constants;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+@EqualsAndHashCode(callSuper = true)
 @Service
 @RequiredArgsConstructor
 @Slf4j

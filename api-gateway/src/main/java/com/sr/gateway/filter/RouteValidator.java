@@ -10,8 +10,11 @@ import java.util.function.Predicate;
 public class RouteValidator {
 
     public static final List<String> openApiEndpoints = List.of(
-            "/user/**",
+            "/user/",
             "/eureka"
+    );
+    public static final List<String> adminApiEndpoints = List.of(
+            "/admin/"
     );
 
 
@@ -19,4 +22,9 @@ public class RouteValidator {
             request -> openApiEndpoints
                     .stream()
                     .noneMatch(uri -> request.getURI().getPath().contains(uri));
+
+    public Predicate<ServerHttpRequest> isAdmin =
+            request -> adminApiEndpoints
+                    .stream()
+                    .anyMatch(uri -> request.getURI().getPath().contains(uri));
 }

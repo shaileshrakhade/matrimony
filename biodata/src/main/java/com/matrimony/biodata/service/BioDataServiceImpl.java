@@ -10,6 +10,7 @@ import com.matrimony.biodata.repo.BioDatRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,25 +23,75 @@ public class BioDataServiceImpl implements BioDataService {
 
 
     @Override
-    public boolean approve(boolean isApprove, String id,String username) throws BioDataNotFoundException {
+    public BioDataDao approve(boolean isApprove, String id, String username) throws BioDataNotFoundException {
         BioData bioData = bioDatRepo.findById(id).orElseThrow(() -> new BioDataNotFoundException("Bio-data is not exist"));
-        bioData.setComment("Bio Data Application approved");
+
+        bioData.setComment("Bio Data Application  approved status :: " + String.valueOf(isApprove).toUpperCase());
         bioData.setApprove(isApprove);
         bioData.setOperationsBy(username);
-        bioDatRepo.save(bioData);
-        return true;
+        bioData = bioDatRepo.save(bioData);
+        return BioDataDao.builder()
+                .id(bioData.getId())
+                .username(bioData.getUsername())
+                .fullName(bioData.getFullName())
+                .phoneNumber(bioData.getPhoneNumber())
+                .alternateNumber(bioData.getAlternateNumber())
+                .birthDate(bioData.getBirthDate())
+                .birthPlace(bioData.getBirthPlace())
+                .height(bioData.getHeight())
+                .gotra(bioData.getGotra())
+                .gan(bioData.getGan())
+                .nstrakhan(bioData.getNstrakhan())
+                .nadi(bioData.getNadi())
+                .bloodGroup(bioData.getBloodGroup())
+                .qualification(bioData.getQualification())
+                .job(bioData.getJob())
+                .familyInformation(bioData.getFamilyInformation())
+                .address(bioData.getAddress())
+                .mamkul(bioData.getMamkul())
+                .picUrl(bioData.getPicUrl())
+                .paymentUrl(bioData.getPaymentUrl())
+                .registerAt(bioData.getRegisterAt())
+                .comment(bioData.getComment())
+                .isApprove(bioData.isApprove())
+                .build();
+
     }
 
     @Override
-    public boolean shouldUpdate(boolean isUpdate, String id,String comments,String username) throws BioDataNotFoundException {
+    public BioDataDao shouldUpdate(boolean isUpdate, String id, String comments, String username) throws BioDataNotFoundException {
         BioData bioData = bioDatRepo.findById(id).orElseThrow(() -> new BioDataNotFoundException("Bio-data is not exist"));
         if (isUpdate)
             bioData.setApprove(false);
         bioData.setUpdate(isUpdate);
         bioData.setComment(comments);
         bioData.setOperationsBy(username);
-        bioDatRepo.save(bioData);
-        return true;
+        bioData = bioDatRepo.save(bioData);
+        return BioDataDao.builder()
+                .id(bioData.getId())
+                .username(bioData.getUsername())
+                .fullName(bioData.getFullName())
+                .phoneNumber(bioData.getPhoneNumber())
+                .alternateNumber(bioData.getAlternateNumber())
+                .birthDate(bioData.getBirthDate())
+                .birthPlace(bioData.getBirthPlace())
+                .height(bioData.getHeight())
+                .gotra(bioData.getGotra())
+                .gan(bioData.getGan())
+                .nstrakhan(bioData.getNstrakhan())
+                .nadi(bioData.getNadi())
+                .bloodGroup(bioData.getBloodGroup())
+                .qualification(bioData.getQualification())
+                .job(bioData.getJob())
+                .familyInformation(bioData.getFamilyInformation())
+                .address(bioData.getAddress())
+                .mamkul(bioData.getMamkul())
+                .picUrl(bioData.getPicUrl())
+                .paymentUrl(bioData.getPaymentUrl())
+                .registerAt(bioData.getRegisterAt())
+                .comment(bioData.getComment())
+                .isApprove(bioData.isApprove())
+                .build();
     }
 
     @Override
@@ -48,6 +99,7 @@ public class BioDataServiceImpl implements BioDataService {
         return bioDatRepo.findAllByIsApprove(isApprove)
                 .stream().map(bioData -> BioDataDao.builder()
                         .id(bioData.getId())
+                        .username(bioData.getUsername())
                         .fullName(bioData.getFullName())
                         .phoneNumber(bioData.getPhoneNumber())
                         .alternateNumber(bioData.getAlternateNumber())
@@ -70,11 +122,12 @@ public class BioDataServiceImpl implements BioDataService {
     }
 
     @Override
-    public BioDataDao show(String id,boolean isApprove) throws BioDataNotFoundException {
+    public BioDataDao show(String id, boolean isApprove) throws BioDataNotFoundException {
         BioData bioData = bioDatRepo.findByIdAndIsApprove(id, isApprove).orElseThrow(() -> new BioDataNotFoundException("Bio-data is not exist"));
 
         return BioDataDao.builder()
                 .id(bioData.getId())
+                .username(bioData.getUsername())
                 .fullName(bioData.getFullName())
                 .phoneNumber(bioData.getPhoneNumber())
                 .alternateNumber(bioData.getAlternateNumber())
@@ -253,7 +306,10 @@ public class BioDataServiceImpl implements BioDataService {
     }
 
     @Override
-    public boolean delete(String id) {
+    @Transactional
+    public boolean delete(String id) throws BioDataNotFoundException {
+        bioDatRepo.findById(id).orElseThrow(() -> new BioDataNotFoundException("Bio-data is not exist"));
+
         bioDatRepo.deleteById(id);
         return true;
     }

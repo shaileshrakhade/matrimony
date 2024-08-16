@@ -1,4 +1,4 @@
-package com.micro.discovery_server;
+package com.sr.discoveryServer;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

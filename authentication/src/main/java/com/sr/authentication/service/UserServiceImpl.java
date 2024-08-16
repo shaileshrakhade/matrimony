@@ -5,10 +5,12 @@ import com.sr.authentication.customExceptions.exceptions.PhoneNumberAlreadyExist
 import com.sr.authentication.customExceptions.exceptions.UsernameAlreadyExistException;
 import com.sr.authentication.dao.UserCredentialDto;
 import com.sr.authentication.dao.UserDetailsDto;
+import com.sr.authentication.enums.Role;
 import com.sr.authentication.model.Users;
 import com.sr.authentication.repo.UserRepository;
 import com.sr.authentication.securityConfig.service.CustomUserDetailsService;
-import com.sr.authentication.util.jwt.JwtService;
+import com.sr.authentication.util.jwt.JwtClaims;
+import com.sr.authentication.util.jwt.JwtTokenGenerate;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,7 +29,8 @@ public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final JwtService jwtService;
+    private final JwtClaims jwtClaims;
+    private final JwtTokenGenerate jwtTokenGenerate;
     private final CustomUserDetailsService customUserDetailsService;
 
     @Value("${custom.security.otp.expiry.time}")
@@ -59,6 +62,7 @@ public class UserServiceImpl implements UserService {
                             .tokenGeneratorOn(users.getTokenGeneratorOn())
                             .provider(users.getProvider())
                             .otp(users.getOtp())
+                            .otpExpiryOn(users.getOtpExpiryOn())
                             .roles(users.getRole())
                             .build();
 
@@ -79,6 +83,7 @@ public class UserServiceImpl implements UserService {
                     .tokenGeneratorOn(users.getTokenGeneratorOn())
                     .provider(users.getProvider())
                     .otp(users.getOtp())
+                    .otpExpiryOn(users.getOtpExpiryOn())
                     .roles(users.getRole())
                     .build();
 
@@ -127,26 +132,31 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDetailsDto updateUser(UserDetailsDto userDetailsDto, String username) throws PhoneNumberAlreadyExistException {
-        Users user = userRepository.findByUserName(username)
+        Users users = userRepository.findByUserName(username)
                 .orElseThrow(() -> new UsernameNotFoundException("Username not exist"));
         if (!userDetailsDto.getPhoneNumber().isEmpty())
-            if (!userDetailsDto.getPhoneNumber().equals(user.getPhoneNumber()))
+            if (!userDetailsDto.getPhoneNumber().equals(users.getPhoneNumber()))
                 if (userRepository.findByPhoneNumber(userDetailsDto.getPhoneNumber()).isPresent()) {
                     throw new PhoneNumberAlreadyExistException("Mobile Number already exist");
                 }
-        user.setEmailId(userDetailsDto.getEmailId());
-        user.setPhoneNumber(userDetailsDto.getPhoneNumber());
-        user.setFullName(userDetailsDto.getFullName());
-        user.setUpdateOn(new Date());
-        user = userRepository.save(user);
+        users.setEmailId(userDetailsDto.getEmailId());
+        users.setPhoneNumber(userDetailsDto.getPhoneNumber());
+        users.setFullName(userDetailsDto.getFullName());
+        users.setUpdateOn(new Date());
+        users = userRepository.save(users);
         return UserDetailsDto.builder()
-                .userName(user.getUserName())
-                .phoneNumber(user.getPhoneNumber())
-                .emailId(user.getEmailId())
-                .fullName(user.getFullName())
-                .updateOn(user.getUpdateOn())
-                .tokenGeneratorOn(user.getTokenGeneratorOn())
-                .provider(user.getProvider()).build();
+                .id(users.getId())
+                .userName(users.getUserName())
+                .phoneNumber(users.getPhoneNumber())
+                .emailId(users.getEmailId())
+                .fullName(users.getFullName())
+                .updateOn(users.getUpdateOn())
+                .tokenGeneratorOn(users.getTokenGeneratorOn())
+                .provider(users.getProvider())
+                .otp(users.getOtp())
+                .otpExpiryOn(users.getOtpExpiryOn())
+                .roles(users.getRole())
+                .build();
     }
 
     @Override
@@ -181,8 +191,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public long deleteUser(Long userId, String username) {
-        return userRepository.deleteByIdAndUserName(userId, username);
+    public boolean deleteUser(Long userId, String username) {
+        userRepository.findByIdAndUserName(userId, username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        userRepository.deleteByIdAndUserName(userId, username);
+        return true;
     }
 
     @Override
@@ -195,18 +207,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDetailsDto markAdmin(Role role, String username) {
+        Users users = userRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("User Name not exist"));
+        users.setRole(role);
+        users = userRepository.save(users);
+        return UserDetailsDto.builder()
+                .id(users.getId())
+                .userName(users.getUserName())
+                .phoneNumber(users.getPhoneNumber())
+                .emailId(users.getEmailId())
+                .fullName(users.getFullName())
+                .updateOn(users.getUpdateOn())
+                .tokenGeneratorOn(users.getTokenGeneratorOn())
+                .provider(users.getProvider())
+                .otp(users.getOtp())
+                .otpExpiryOn(users.getOtpExpiryOn())
+                .roles(users.getRole())
+                .build();
+
+    }
+
+    @Override
     public String generateToken(String username) {
         Users users = userRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("User Name not exist"));
         users.setTokenGeneratorOn(new Date());
-        userRepository.save(users);
-
-        return jwtService
+        users = userRepository.save(users);
+        //set roles in token
+        return jwtTokenGenerate
                 .generateToken(customUserDetailsService.loadUserByUsername(username));
     }
 
     @Override
     public boolean isTokenValid(String token, String username) {
-        return jwtService
+        return jwtTokenGenerate
                 .isTokenValid(token, customUserDetailsService.loadUserByUsername(username));
     }
 }

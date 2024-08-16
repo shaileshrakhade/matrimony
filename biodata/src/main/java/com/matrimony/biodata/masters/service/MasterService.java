@@ -16,4 +16,5 @@ public interface MasterService {
     MasterDao update(MasterDao masterDao) throws MasterAttributesNotFoundException;
 
     boolean isPublish() throws MasterAttributesNotFoundException;
+    boolean delete(String key) throws MasterAttributesNotFoundException;
 }

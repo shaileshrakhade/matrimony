@@ -8,4 +8,6 @@ import java.util.Optional;
 public interface MasterRepo extends MongoRepository<Master, String> {
 
     Optional<Master> findByKey(String key);
+
+    void deleteByKey(String key);
 }
