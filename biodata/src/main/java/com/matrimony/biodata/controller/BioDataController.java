@@ -9,6 +9,7 @@ import com.matrimony.biodata.masters.exceptions.MasterAttributesNotFoundExceptio
 import com.matrimony.biodata.masters.service.MasterService;
 import com.matrimony.biodata.masters.util.Constants;
 import com.matrimony.biodata.service.BioDataService;
+import jakarta.ws.rs.DefaultValue;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
@@ -28,9 +29,12 @@ public class BioDataController {
 
     @GetMapping("show")
     @ResponseStatus(HttpStatus.OK)
-    public List<BioDataDao> show() throws BioDataNotFoundException, MasterAttributesNotFoundException {
+    public List<BioDataDao> show(@RequestParam(value = "filter", required = false, defaultValue = "registerAt") String filter,
+                                 @RequestParam(value = "sort", required = false, defaultValue = "registerAt") String sort,
+                                 @RequestParam(value = "pageNo", required = false, defaultValue = "0") int pageNo,
+                                 @RequestParam(value = "pageSize", required = false, defaultValue = "5") int pageSize) throws BioDataNotFoundException, MasterAttributesNotFoundException {
         if (masterService.isPublish())
-            return bioDataService.show(true);
+            return bioDataService.show(true, pageNo, pageSize,sort,filter);
         else
             throw new BioDataNotFoundException(masterService.show(Constants.BIO_DATA_NOT_PUBLISH_MSG).getValue());
     }

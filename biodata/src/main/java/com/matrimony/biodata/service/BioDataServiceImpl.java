@@ -9,9 +9,15 @@ import com.matrimony.biodata.model.BioData;
 import com.matrimony.biodata.repo.BioDatRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 @Service
@@ -215,6 +221,7 @@ public class BioDataServiceImpl implements BioDataService {
                     .comment("Application Submitted! it will review & approved soon...")
                     .isUpdate(false)
                     .isApprove(false)
+                    .registerAt(new Date())
                     .build();
 
             bioData = bioDatRepo.save(bioData);
@@ -312,5 +319,40 @@ public class BioDataServiceImpl implements BioDataService {
 
         bioDatRepo.deleteById(id);
         return true;
+    }
+
+    @Override
+    @Transactional
+    public long deleteOld(Date date) throws BioDataNotFoundException {
+        return bioDatRepo.deleteByRegisterAtBefore(date);
+    }
+
+    @Override
+    public List<BioDataDao> show(boolean isApprove, int pageNo, int pageSize, String sort, String filter) {
+        Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
+
+        return bioDatRepo.findByIsApproveAndFullNameContainsIgnoreCaseOrQualificationContainsIgnoreCaseOrAddressContainsIgnoreCaseOrJobContainsIgnoreCase(pageable, isApprove, filter, filter, filter, filter)
+                .stream().map(bioData -> BioDataDao.builder()
+                        .id(bioData.getId())
+                        .username(bioData.getUsername())
+                        .fullName(bioData.getFullName())
+                        .phoneNumber(bioData.getPhoneNumber())
+                        .alternateNumber(bioData.getAlternateNumber())
+                        .birthDate(bioData.getBirthDate())
+                        .birthPlace(bioData.getBirthPlace())
+                        .height(bioData.getHeight())
+                        .gotra(bioData.getGotra())
+                        .gan(bioData.getGan())
+                        .nstrakhan(bioData.getNstrakhan())
+                        .nadi(bioData.getNadi())
+                        .bloodGroup(bioData.getBloodGroup())
+                        .qualification(bioData.getQualification())
+                        .job(bioData.getJob())
+                        .familyInformation(bioData.getFamilyInformation())
+                        .address(bioData.getAddress())
+                        .mamkul(bioData.getMamkul())
+                        .picUrl(bioData.getPicUrl())
+                        .build()).toList();
+
     }
 }

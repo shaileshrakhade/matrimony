@@ -37,7 +37,7 @@ public class BioData {
     private String picUrl;
     private String paymentUrl;
     private String comment;
-    private Date registerAt=new Date();
+    private Date registerAt;
     private boolean isUpdate;
     private boolean isApprove;
     private String operationsBy;
