@@ -16,8 +16,8 @@ import java.util.Map;
 @Service
 public class JwtTokenGenerateImpl implements JwtTokenGenerate {
 
-    @Value("${spring.application.name}")
-    private String applicationName;
+    @Value("${spring.security.application.secret-key}")
+    private String applicationSecretKey;
     @Value("${spring.application.description}")
     private String applicationDescription;
     @Value("${security.jwt.secret-key}")
@@ -39,7 +39,7 @@ public class JwtTokenGenerateImpl implements JwtTokenGenerate {
     @Override
     public String generateToken(UserDetails userDetails) {
         Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put(CustomKeysEnums.APPLICATION.name(), applicationName);
+        extraClaims.put(CustomKeysEnums.APPLICATION.name(), applicationSecretKey);
         extraClaims.put(CustomKeysEnums.APPLICATION_DESCRIPTION.name(), applicationDescription);
         List<String> role = userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).toList();
 

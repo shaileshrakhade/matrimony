@@ -1,12 +1,14 @@
-server:
-  port: 8080
 ## Product Service Route
 spring:
-  application:
-    name: API-GATEWAY
   cloud:
     gateway:
       routes:
+        ## Discovery Service Static Route
+        - id: CONFIG-SERVER
+          uri: http://admin:admin@${app.config-server}:8761
+          predicates:
+            - Path=/application/**
+
         ## Discovery Service Static Route
         - id: DISCOVERY-SERVICE-STATIC
           uri: http://admin:admin@${app.eureka-server}:8761
@@ -44,7 +46,7 @@ spring:
           filters:
             - AuthenticationFilter
 
-        ## FAVORITE-SERVICE  Route
+        ## FAVORITE-SERVICE Route
         - id: FAVORITE-SERVICE
           uri: lb://FAVORITE-SERVICE
           predicates:

@@ -5,6 +5,7 @@ import com.matrimony.biodata.customExceptions.exceptions.BioDataAlreadyExistExce
 import com.matrimony.biodata.customExceptions.exceptions.BioDataNotFoundException;
 import com.matrimony.biodata.customExceptions.exceptions.BioDataUpdateException;
 import com.matrimony.biodata.dao.BioDataDao;
+import org.springframework.data.domain.Page;
 
 import java.util.Date;
 import java.util.List;
@@ -31,5 +32,5 @@ public interface BioDataService {
     public long deleteOld(Date date) throws BioDataNotFoundException;
 
 
-    List<BioDataDao> show(boolean b, int pageNo, int pageSize, String sort, String filter);
+    Page<BioDataDao> show(boolean b, int pageNo, int pageSize, String sort, String filter);
 }

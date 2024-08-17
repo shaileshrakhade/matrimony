@@ -1,5 +1,7 @@
 package com.matrimony.favorite.controller;
 
+import com.matrimony.favorite.customExceptions.exceptions.AlreadyAddedInFavorateException;
+import com.matrimony.favorite.customExceptions.exceptions.FavoriteNotFoundException;
 import com.matrimony.favorite.dao.FavoriteDao;
 import com.matrimony.favorite.service.FavoriteService;
 import lombok.RequiredArgsConstructor;
@@ -19,16 +21,16 @@ public class FavoriteController {
     private FavoriteService favoriteService;
 
     @PostMapping("add")
-    public FavoriteDao add(@RequestBody FavoriteDao favoriteDao) {
+    public FavoriteDao add(@RequestBody FavoriteDao favoriteDao) throws AlreadyAddedInFavorateException {
         return favoriteService.add(favoriteDao);
     }
 
     @PutMapping("update/{id}")
-    public FavoriteDao update(@RequestBody FavoriteDao favoriteDao,@PathVariable("id") long id) {
+    public FavoriteDao update(@RequestBody FavoriteDao favoriteDao,@PathVariable("id") long id) throws FavoriteNotFoundException {
         return favoriteService.update(favoriteDao, id);
     }
     @PutMapping("update")
-    public FavoriteDao updateRequestPara(@RequestBody FavoriteDao favoriteDao,@RequestParam("id") long id) {
+    public FavoriteDao updateRequestPara(@RequestBody FavoriteDao favoriteDao,@RequestParam("id") long id) throws FavoriteNotFoundException {
         return favoriteService.update(favoriteDao, id);
     }
 

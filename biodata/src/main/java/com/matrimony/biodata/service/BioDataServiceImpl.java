@@ -9,6 +9,7 @@ import com.matrimony.biodata.model.BioData;
 import com.matrimony.biodata.repo.BioDatRepo;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -328,11 +329,11 @@ public class BioDataServiceImpl implements BioDataService {
     }
 
     @Override
-    public List<BioDataDao> show(boolean isApprove, int pageNo, int pageSize, String sort, String filter) {
+    public Page<BioDataDao> show(boolean isApprove, int pageNo, int pageSize, String sort, String filter) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
 
         return bioDatRepo.findByIsApproveAndFullNameContainsIgnoreCaseOrQualificationContainsIgnoreCaseOrAddressContainsIgnoreCaseOrJobContainsIgnoreCase(pageable, isApprove, filter, filter, filter, filter)
-                .stream().map(bioData -> BioDataDao.builder()
+                .map(bioData -> BioDataDao.builder()
                         .id(bioData.getId())
                         .username(bioData.getUsername())
                         .fullName(bioData.getFullName())
@@ -352,7 +353,7 @@ public class BioDataServiceImpl implements BioDataService {
                         .address(bioData.getAddress())
                         .mamkul(bioData.getMamkul())
                         .picUrl(bioData.getPicUrl())
-                        .build()).toList();
+                        .build());
 
     }
 }

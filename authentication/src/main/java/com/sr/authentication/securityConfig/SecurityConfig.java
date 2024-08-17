@@ -70,9 +70,7 @@ public class SecurityConfig {
                             log.info("token from google :: {}", tokenDto.getToken());
                         } catch (UsernameAlreadyExistException e) {
                             response.sendRedirect("/openapi/error?error" + e.getMessage());
-                            //throw new RuntimeException(e);
                         }
-                        //response.setHeader("Authorization", "Bearer " + tokenDto.getToken());
                         response.sendRedirect("/user/validate-token?token=" + tokenDto.getToken());
                     }
                 }

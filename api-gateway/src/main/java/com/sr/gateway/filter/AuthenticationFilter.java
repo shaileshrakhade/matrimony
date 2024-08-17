@@ -3,6 +3,7 @@ package com.sr.gateway.filter;
 import com.sr.gateway.customExceptions.exceptions.InvalidTokenException;
 import com.sr.gateway.customExceptions.exceptions.UserTokenNotValid;
 import com.sr.gateway.enums.Role;
+import com.sr.gateway.util.jwt.CustomKeysEnums;
 import com.sr.gateway.util.jwt.JwtClaims;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
             if (routeValidator.isSecured.test(exchange.getRequest())) {
                 //header contains token or not
                 if (!exchange.getRequest().getHeaders().containsKey(HttpHeaders.AUTHORIZATION)) {
-                    throw new RuntimeException("missing authorization header");
+                    throw new RuntimeException("Missing Authorization Header");
                 }
                 String authHeader = exchange.getRequest().getHeaders().get(HttpHeaders.AUTHORIZATION).get(0);
                 if (authHeader != null && authHeader.startsWith("Bearer ")) {
@@ -40,9 +41,9 @@ public class AuthenticationFilter extends AbstractGatewayFilterFactory<Authentic
                     //  template.getForObject("http://AUTHENTICATION-SERVICE//validate?token" + authHeader, String.class);
                     // here we directly create the same class to validate token on the basic of secret key only
                     //if you want to check in DB as well is this validate username then we need to call the auth request
-                    if (!jwtClaims.isTokenValid(authHeader))
+                    if (!jwtClaims.isTokenValid(authHeader) &&
+                            jwtClaims.valueFromToken(authHeader, CustomKeysEnums.APPLICATION).isEmpty())
                         throw new RuntimeException("Token Information Is Not Valid.");
-
 
                     if (routeValidator.isAdmin.test(exchange.getRequest())) {
                         List<String> list = jwtClaims.extractRoles(authHeader);
