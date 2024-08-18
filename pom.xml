@@ -7,19 +7,22 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.3.1</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
+        <!-- lookup parent from repository -->
     </parent>
     <groupId>com.matrimony</groupId>
     <artifactId>matrimony</artifactId>
+    <name>MATRIMONY</name>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>api-gateway</module>
+        <module>config-server</module>
         <module>discovery-server</module>
-        <module>authentication</module>
-        <module>admin</module>
-        <module>biodata</module>
-        <module>favorite</module>
+        <module>api-gateway</module>
+        <module>authentication-server</module>
+        <module>admin-server</module>
+        <module>biodata-server</module>
+        <module>favorite-server</module>
     </modules>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -52,6 +55,38 @@
                         </exclude>
                     </excludes>
                 </configuration>
+            </plugin>
+            <!--         jib-maven-plugin it was use & build container image & send it to the docker hub  without using any docker file [username & password need to provided in settings.xml] -->
+            <plugin>
+                <groupId>com.google.cloud.tools</groupId>
+                <artifactId>jib-maven-plugin</artifactId>
+                <version>3.2.1</version>
+                <configuration>
+                    <from>
+                        <!--  eclipse-temurin   use to build the container images -->
+                        <image>eclipse-temurin:17.0.4.1_1-jre</image>
+                    </from>
+                    <to>
+                        <!-- send that images to provided location i.e. docker hub-->
+                        <image>registry.hub.docker.com/shaileshrakhade/matrimony-${project.artifactId}</image>
+                        <auth>
+                            <username>shaileshrakhade</username>
+                            <password>Shailesh@1997</password>
+                        </auth>
+                        <tags>
+                            <tag>latest</tag>
+                            <tag>${project.version}</tag>
+                        </tags>
+                    </to>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>dockerBuild</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>

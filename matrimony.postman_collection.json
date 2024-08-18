@@ -1,0 +1,2006 @@
+{
+	"info": {
+		"_postman_id": "82f933bb-41ea-4244-b184-579674007b53",
+		"name": "matrimony",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "37115999"
+	},
+	"item": [
+		{
+			"name": "openapi/welcome",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/openapi/welcome",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"openapi",
+						"welcome"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "openapi/error?error=not valid",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/openapi/error?error=not valid",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"openapi",
+						"error"
+					],
+					"query": [
+						{
+							"key": "error",
+							"value": "not valid"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/register",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName\":\"bhargavijoshi98@gmail.com\",\r\n    \"phoneNumber\":\"9130429439\",\r\n    \"emailId\":\"bhargavijoshi98@gmail.com\",\r\n    \"fullName\":\"Bhargavi joshi\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/register",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"register"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/set-password",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName\":\"bhargavijoshi98@gmail.com\",\r\n    \"password\":\"bhargavijoshi98@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/set-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"set-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/login",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName\":\"admin\",\r\n    \"password\":\"admin\"\r\n    \r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/update",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \r\n    \"userName\": \"admin\",\r\n    \"phoneNumber\": \"9922265169\",\r\n    \"emailId\": \"shailesh15.sr@gmail.com\",\r\n    \"fullName\": \"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/send-otp",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName\":\"bhargavijoshi98@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/send-otp",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"send-otp"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/forgot-password?otp=017584&username=admin",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/forgot-password?otp=017584&username=admin",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"forgot-password"
+					],
+					"query": [
+						{
+							"key": "otp",
+							"value": "017584"
+						},
+						{
+							"key": "username",
+							"value": "admin"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/update-password",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName\":\"admin\",\r\n    \"password\":\"admin\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/update-password",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"update-password"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/validate-token/token=?",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/validate-token?token={{admin}}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"validate-token"
+					],
+					"query": [
+						{
+							"key": "token",
+							"value": "{{admin}}"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "user/de-active/{userId}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{shailesh2019}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/user/de-active/2/",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"user",
+						"de-active",
+						"2",
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "secure/welcome",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/secure/welcome",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"secure",
+						"welcome"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "secure/me",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/secure/me",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"secure",
+						"me"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "secure/profile",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/secure/profile",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"secure",
+						"profile"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "secure/value-from-token/{key}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJST0xFIjpbeyJhdXRob3JpdHkiOiJBRE1JTiJ9XSwiQVBQTElDQVRJT04iOiJBVVRIRU5USUNBVElPTi1TRVJWSUNFIiwiQVBQTElDQVRJT05fREVTQ1JJUFRJT04iOiJBdXRoZW50aWNhdGlvbiBvZiBNYXRyaW1vbnkgQXBwbGljYXRpb24iLCJzdWIiOiJhZG1pbiIsImlhdCI6MTcyMzc5NzI5NSwiZXhwIjoxNzU1MzMzMjk1fQ.BYRBhFxhr76cQMBR68uQKm2H97KG3M5ZanORNqm8Z_Y",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/secure/value-from-token/APPLICATION",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"secure",
+						"value-from-token",
+						"APPLICATION"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "secure/roles",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJhbGciOiJIUzI1NiJ9.eyJST0xFIjpbIkFETUlOIl0sIkFQUExJQ0FUSU9OIjoiQVVUSEVOVElDQVRJT04tU0VSVklDRSIsIkFQUExJQ0FUSU9OX0RFU0NSSVBUSU9OIjoiQXV0aGVudGljYXRpb24gb2YgTWF0cmltb255IEFwcGxpY2F0aW9uIiwic3ViIjoiYWRtaW4iLCJpYXQiOjE3MjM4MTI1NDMsImV4cCI6MTc1NTM0ODU0M30.nftnkSll_SKNGh2mamkuQhhcd8o8AdWPkp7-_ds5JJw",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/secure/roles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"secure",
+						"roles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin/delete/{userId}/{username}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"userName\":\"admin\",\r\n    \"password\":\"admin\",\r\n    \"otp\":\"0000\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/admin/delete/2/shailesh2019.sr@gmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"delete",
+						"2",
+						"shailesh2019.sr@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin/welcome",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/admin/welcome",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"welcome"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin/all-users",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/admin/all-users",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"all-users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin/roles",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/admin/roles",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"roles"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "admin/update-roles/{role}/{username}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/admin/update-roles/USER/bhargavijoshi98@gmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"admin",
+						"update-roles",
+						"USER",
+						"bhargavijoshi98@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/show",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/show",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"show"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/show?pageNo=0&pageSize=2&sort=fullName&filter=ner",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/show?pageNo=0&pageSize=1&sort=fullName&filter=ner",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"show"
+					],
+					"query": [
+						{
+							"key": "pageNo",
+							"value": "0"
+						},
+						{
+							"key": "pageSize",
+							"value": "1"
+						},
+						{
+							"key": "sort",
+							"value": "fullName"
+						},
+						{
+							"key": "filter",
+							"value": "ner"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/show/{id}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/show/66bca7d131eb0a0b647eea0e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"show",
+						"66bca7d131eb0a0b647eea0e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/is-present/{id}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true,
+				"disabledSystemHeaders": {}
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/is-present/66bca7d131eb0a0b647eea0e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"is-present",
+						"66bca7d131eb0a0b647eea0e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/{username}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/bio-data/bhargavijoshi98@gmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"bio-data",
+						"bhargavijoshi98@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/add",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullName\": \"shailesh rakhade\",\r\n    \"phoneNumber\": \"9130429439\",\r\n    \"alternateNumber\": \"9130429439\",\r\n    \"birthDate\": \"25021998\",\r\n    \"birthPlace\": \"ner\",\r\n    \"height\": \"5.2\",\r\n    \"gotra\": \"kashp\",\r\n    \"gan\": \"dev\",\r\n    \"nstrakhan\": \"mul\",\r\n    \"nadi\": \"antya\",\r\n    \"bloodGroup\": \"B+\",\r\n    \"qualification\": \"MCA\",\r\n    \"job\": \"software enginear\",\r\n    \"familyInformation\": null,\r\n    \"address\": \"ner\",\r\n    \"mamkul\": \"tambhakhe\",\r\n    \"picUrl\": \"my.jpg\",\r\n    \"paymentUrl\": \"pay.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/test-add/{username}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"fullName\": \"shailesh rakhade\",\r\n    \"phoneNumber\": \"9130429439\",\r\n    \"alternateNumber\": \"9130429439\",\r\n    \"birthDate\": \"25021998\",\r\n    \"birthPlace\": \"ner\",\r\n    \"height\": \"5.2\",\r\n    \"gotra\": \"kashp\",\r\n    \"gan\": \"dev\",\r\n    \"nstrakhan\": \"mul\",\r\n    \"nadi\": \"antya\",\r\n    \"bloodGroup\": \"B+\",\r\n    \"qualification\": \"MCA\",\r\n    \"job\": \"software enginear\",\r\n    \"familyInformation\": null,\r\n    \"address\": \"ner\",\r\n    \"mamkul\": \"tambhakhe\",\r\n    \"picUrl\": \"my.jpg\",\r\n    \"paymentUrl\": \"pay.jpg\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/test-add/shailesh15.sr@gmail.com",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"test-add",
+						"shailesh15.sr@gmail.com"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/update/{username}/{id}",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"66bca7d131eb0a0b647eea0e\",\r\n    \"username\": \"bhargavijoshi98@gmail.com\",\r\n    \"fullName\": \"Bhargavi Joshi\",\r\n    \"phoneNumber\": \"9130429439\",\r\n    \"alternateNumber\": \"9130429439\",\r\n    \"birthDate\": \"25021998\",\r\n    \"birthPlace\": \"ner\",\r\n    \"height\": \"5.2\",\r\n    \"gotra\": \"kashp\",\r\n    \"gan\": \"dev\",\r\n    \"nstrakhan\": null,\r\n    \"nadi\": null,\r\n    \"bloodGroup\": null,\r\n    \"qualification\": null,\r\n    \"job\": null,\r\n    \"familyInformation\": null,\r\n    \"address\": null,\r\n    \"mamkul\": null,\r\n    \"picUrl\": null,\r\n    \"paymentUrl\": null\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/bio-data/update/bhargavijoshi98@gmail.com/66bca7d131eb0a0b647eea0e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"bio-data",
+						"update",
+						"bhargavijoshi98@gmail.com",
+						"66bca7d131eb0a0b647eea0e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/not-approved?pageNo=0&pageSize=2&sort=fullName&filter=ner",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/bio-data/admin/not-approved?pageNo=0&pageSize=2&sort=fullName&filter=ner",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"bio-data",
+						"admin",
+						"not-approved"
+					],
+					"query": [
+						{
+							"key": "pageNo",
+							"value": "0"
+						},
+						{
+							"key": "pageSize",
+							"value": "2"
+						},
+						{
+							"key": "sort",
+							"value": "fullName"
+						},
+						{
+							"key": "filter",
+							"value": "ner"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/not-approved/{id}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/admin/not-approved/66bca7d131eb0a0b647eea0e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"admin",
+						"not-approved",
+						"66bca7d131eb0a0b647eea0e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/approved?pageNo=0&pageSize=2&sort=fullName&filter=ner",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/admin/approved?pageNo=0&pageSize=2&sort=fullName&filter=ner",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"admin",
+						"approved"
+					],
+					"query": [
+						{
+							"key": "pageNo",
+							"value": "0"
+						},
+						{
+							"key": "pageSize",
+							"value": "2"
+						},
+						{
+							"key": "sort",
+							"value": "fullName"
+						},
+						{
+							"key": "filter",
+							"value": "ner"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/approved/{is-approve}/{id}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/admin/approved/true/66bca7d131eb0a0b647eea0e",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"admin",
+						"approved",
+						"true",
+						"66bca7d131eb0a0b647eea0e"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/need-update/{is-update}/{id}/{comments}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/admin/need-update/false/66bca7d131eb0a0b647eea0e/payment file is requred",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"admin",
+						"need-update",
+						"false",
+						"66bca7d131eb0a0b647eea0e",
+						"payment file is requred"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/delete/{id}",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/bio-data/admin/delete/66bee4f00b32b611b9b62dc8",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"bio-data",
+						"admin",
+						"delete",
+						"66bee4f00b32b611b9b62dc8"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/delete-old/{MMddyyyy}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/admin/delete-old/08162024",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"admin",
+						"delete-old",
+						"08162024"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/master-attribute/show/{key}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/master-attribute/show/IS_BIO_DATA_PUBLISH",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"master-attribute",
+						"show",
+						"IS_BIO_DATA_PUBLISH"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/master-attribute/is-publish",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8083/bio-data/master-attribute/is-publish",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8083",
+					"path": [
+						"bio-data",
+						"master-attribute",
+						"is-publish"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/master-attribute/show-all",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data//admin/master-attribute/show-all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"",
+						"admin",
+						"master-attribute",
+						"show-all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/master-attribute/add",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"key\":\"sdr\",\r\n    \"value\":\"test\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/admin/master-attribute/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"admin",
+						"master-attribute",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/master-attribute/update",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"key\":\"\",\r\n    \"value\":\"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/admin/bio-data/master-attribute/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"admin",
+						"bio-data",
+						"master-attribute",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/master-attribute/make-publish/{flg}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{admin}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/admin/master-attribute/make-publish/true",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"admin",
+						"master-attribute",
+						"make-publish",
+						"true"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "bio-data/admin/master-attribute/delete/{key}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/bio-data/admin/master-attribute/delete/sdr",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"bio-data",
+						"admin",
+						"master-attribute",
+						"delete",
+						"sdr"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "master-attribute/admin/update",
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"key\":\"\",\r\n    \"value\":\"\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/admin/master-attribute/update",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"admin",
+						"master-attribute",
+						"update"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "master-attribute/show/{key}",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/master-attribute/show/{key}",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"master-attribute",
+						"show",
+						"{key}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "master-attribute/bio-data-pdf-url",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/master-attribute/bio-data-pdf-url",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"master-attribute",
+						"bio-data-pdf-url"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "master-attribute/dashboard-message",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/master-attribute/dashboard-message",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"master-attribute",
+						"dashboard-message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "master-attribute/notification-message",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/master-attribute/notification-message",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"master-attribute",
+						"notification-message"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "master-attribute/admin/show-all",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8082/admin/master-attribute/show-all",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8082",
+					"path": [
+						"admin",
+						"master-attribute",
+						"show-all"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
