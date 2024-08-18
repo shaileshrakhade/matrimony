@@ -1,0 +1,54 @@
+global:
+  scrape_interval: 10s
+  evaluation_interval: 10s
+
+scrape_configs:
+  - job_name: 'Config'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'config-service:8888' ]
+        labels:
+          application: 'Config  Service Application'
+
+
+  - job_name: 'Discovery'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'discovery-service:8761' ]
+        labels:
+          application: 'Discovery Service Application'
+
+  - job_name: 'API Gateway'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'api-service:8080' ]
+        labels:
+          application: 'API Gateway Service Application'
+
+  - job_name: 'Authentication'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'authentication-service:8080' ]
+        labels:
+          application: 'Authentication Service Application'
+
+  - job_name: 'Admin'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'admin-service:8080' ]
+        labels:
+          application: 'Admin Service Application'
+
+  - job_name: 'Biodata'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'biodata-service:8080' ]
+        labels:
+          application: 'Biodata Service Application'
+
+  - job_name: 'Favorite'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: [ 'favorite-service:8080' ]
+        labels:
+          application: 'Favorite Service Application'

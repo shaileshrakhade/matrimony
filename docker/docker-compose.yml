@@ -1,0 +1,216 @@
+#=================== Docker compose important command  ===============================
+# to build the all microservices & push into docker hub [mvn jib:build]
+# to run docker compose file [docker compose up -d]
+# to pull images from docker hub [docker compose pull]
+# to see the logs from container [docker log -f CONTAINER-NAME]
+# to access container shell outside of container(local machine) [docker exec -it mysql-order bash]
+# to inter into mysql mode [mysql -u root -p root]
+
+---
+version: '3.7'
+services:
+  #=================== Config Server  ===============================
+  ## Config serer all the configuration we are storing n github & from there we use
+  # url  http://localhost:8888/application/default
+  config-service:
+    container_name: config-service
+    image: shaileshrakhade/matrimony-config-service:latest
+    ports:
+      - "8888:8888"
+    expose:
+      - "8888"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+
+  #=================== Service Discovery  ===============================
+  ## Eureka Server as service discovery
+  # we have multiple microservice it very complex to communicate each other & to know the address so discovery server will provide the feature
+  # to register all microservice with it & communicate each other by application its name
+  discovery-server:
+    image: shaileshrakhade/matrimony-discovery-server:latest
+    container_name: discovery-server
+    ports:
+      - "8761:8761"
+    expose:
+      - "8761"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - config-service
+
+  #=================== Service Discovery  ===============================
+  ## Eureka Server as service discovery
+  # we have multiple microservice it very complex to communicate each other & to know the address so discovery server will provide the feature
+  # to register all microservice with it & communicate each other by application its name
+  api-gateway:
+    image: shaileshrakhade/matrimony-api-gateway:latest
+    container_name: api-gateway
+    ports:
+      - "8080:8080"
+    expose:
+      - "8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+      - LOGGING_LEVEL_ORG_SPRINGFRAMEWORK_SECURITY= TRACE
+    depends_on:
+      - discovery-server
+
+  #=================== Business Microservices Containers  ===============================
+  ## Authentication Service Docker image Config
+  authentication-service:
+    container_name: authentication-gateway
+    image: shaileshrakhade/matrimony-authentication-gateway:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - api-gateway
+      - mysql-authentication
+
+  ## Admin Service Docker image Config
+  admin-service:
+    container_name: admin-service
+    image: shaileshrakhade/matrimony-admin-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - api-gateway
+      - mongo-admin
+
+  ## biodata Service Docker image Config
+  biodata-service:
+    container_name: biodata-service
+    image: shaileshrakhade/matrimony-biodata-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - api-gateway
+      - mongo-biodata
+
+  ## favorite Service Docker image Config
+  favorite-service:
+    container_name: favorite-service
+    image: shaileshrakhade/matrimony-favorite-service:latest
+    environment:
+      - SPRING_PROFILES_ACTIVE=docker
+    depends_on:
+      - api-gateway
+      - mysql-favorite
+      - biodata-service
+
+
+
+
+  #=================== SQL,NO-SQL Databases containers use for Micro-Service ===============================
+  ## Databases used in microservices
+  # Mysql DB for authentication microservice
+  mysql-authentication:
+    container_name: mysql-authentication
+    image: mysql:9.0
+    environment:
+      MYSQL_DATABASE: matrimony_authentication
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ../matrimony_volumes/DockerVolumes/mysql-authentication:/var/lib/mysql
+    ports:
+      - "33061:3306"
+    expose:
+      - "3306"
+    restart: always
+
+  # Mysql DB for favorite microservice
+  mysql-favorite:
+    container_name: mysql-favorite
+    image: mysql:9.0
+    environment:
+      MYSQL_DATABASE: matrimony_favorite
+      MYSQL_USER: mysql
+      MYSQL_PASSWORD: mysql
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - ../matrimony_volumes/DockerVolumes/mysql-favorite:/var/lib/mysql
+    ports:
+      - "33062:3306"
+    expose:
+      - "3306"
+    restart: always
+
+  # Mongo (NOSQL) DB for biodata microservice
+  mongo-biodata:
+    container_name: mongo-biodata
+    image: mongo:8.0.0-rc4
+    environment:
+      MONGO_INITDB_DATABASE: matrimony_biodata
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    restart: always
+    ports:
+      - "33063:27017"
+    expose:
+      - "27017"
+    volumes:
+      - ../matrimony_volumes/DockerVolumes/mongo-biodata:/data/db
+
+  # Mongo (NOSQL) DB for product microservice
+  mongo-admin:
+    container_name: mongo-admin
+    image: mongo:8.0.0-rc4
+    environment:
+      MONGO_INITDB_DATABASE: matrimony_admin
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: root
+    restart: always
+    ports:
+      - "33064:27017"
+    expose:
+      - "27017"
+    volumes:
+      - ../matrimony_volumes/DockerVolumes/mongo-admin:/data/db
+
+  #=================== Micro-Service Supporter containers ===============================
+
+  ## Zipkin distributed a tracing system.
+  # It helps gather timing data needed to troubleshoot latency problems
+  # in service architectures we can track the call hierarchy.
+  #  http://localhost:9411/zipkin/
+  zipkin:
+    image: openzipkin/zipkin
+    container_name: zipkin
+    ports:
+      - "9411:9411"
+
+  ## Prometheus is use the actuator endpoint for better matrix of application
+  # an open-source systems monitoring and alerting toolkit
+  prometheus:
+    image: prom/prometheus:v2.37.1
+    container_name: prometheus
+    restart: always
+    ports:
+      - "9090:9090"
+    volumes:
+      #     - copy the file from host machine to container
+      #  in this file we have all the microservice actuator endpoint mention
+      # url http://localhost:9090/
+      - ./prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+
+  ## grafana is  use Prometheus endpoint & show the matrix of application
+  # Grafana helps you collect, correlate, and visualize data with beautiful dashboards
+  # we need to configure  prometheus endpoint with it
+  # & also we can customize the UI in prometheus portal i.e ./grafana/Grafana_Dashboard.json
+  # url http://localhost:3000/
+  grafana:
+    image: grafana/grafana-oss:8.5.2
+    container_name: grafana
+    restart: always
+    ports:
+      - "3000:3000"
+    links:
+      - prometheus:prometheus
+    volumes:
+      - ../matrimony_volumes/DockerVolumes/grafana:/var/lib/grafana
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    depends_on:
+      - prometheus

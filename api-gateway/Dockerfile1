@@ -1,7 +1,0 @@
-#here is the drow back to use this docker it build directly whole jar becouse it was not understnding where exctly the change is happening
-#becouse of that we use layed buil so where exctly the changeis happeing onl that part was updated
-FROM openjdk:17
-
-COPY target/*.jar app.jar
-
-ENTRYPOINT ["java","-jar","/app.jar"]

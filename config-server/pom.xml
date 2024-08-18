@@ -8,7 +8,7 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
     <artifactId>config-server</artifactId>
-    <name>config-server</name>
+    <name>CONFIG</name>
     <description>matrimony config server</description>
 
     <properties>
