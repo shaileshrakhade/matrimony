@@ -4,9 +4,12 @@ spring:
       server:
         git:
           uri: git@github.com:shaileshrakhade/matrimony-config.git
+#          username: shaileshrakhade
+#          password: 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
+#          default-label: "master"
           ignoreLocalSshSettings: true
-#          hostKey: Shailesh
-#          hostKeyAlgorithm: ssh-rsa
+          hostKey: 127.0.0.1
+          hostKeyAlgorithm: ssh-rsa
           privateKey: |
             -----BEGIN RSA PRIVATE KEY-----
             MIIJKAIBAAKCAgEAvT6WxDJKI1tVwHs8LXf3lAYgwOI9Q3JyI15KcjOnwpWGnNQ9

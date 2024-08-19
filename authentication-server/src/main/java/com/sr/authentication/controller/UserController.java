@@ -127,8 +127,7 @@ public class UserController {
         String username = jwtClaims.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
         if (userCredentialDto.getUserName().equals(username)) {
             userCredentialDto.setUserName(username);
-            return "password successfully update :: "
-                    + userService.passwordUpdate(userCredentialDto);
+            return "password successfully update :: ";
         } else {
             throw new InvalidTokenException("Token is not valid");
         }

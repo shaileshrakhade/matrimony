@@ -1019,7 +1019,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/bio-data/is-present/66bca7d131eb0a0b647eea0e",
+					"raw": "http://localhost:8080/bio-data/is-present/66bf6e8c212e9e64e427bf61",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1028,7 +1028,7 @@
 					"path": [
 						"bio-data",
 						"is-present",
-						"66bca7d131eb0a0b647eea0e"
+						"66bf6e8c212e9e64e427bf61"
 					]
 				}
 			},
@@ -1254,7 +1254,7 @@
 					"bearer": [
 						{
 							"key": "token",
-							"value": "{{bhargavijoshi98}}",
+							"value": "{{admin}}",
 							"type": "string"
 						}
 					]
@@ -1271,7 +1271,7 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8080/bio-data/admin/not-approved/66bca7d131eb0a0b647eea0e",
+					"raw": "http://localhost:8080/bio-data/admin/not-approved/66bf835df3535418d043ed7e",
 					"protocol": "http",
 					"host": [
 						"localhost"
@@ -1281,7 +1281,7 @@
 						"bio-data",
 						"admin",
 						"not-approved",
-						"66bca7d131eb0a0b647eea0e"
+						"66bf835df3535418d043ed7e"
 					]
 				}
 			},
@@ -1832,7 +1832,14 @@
 			},
 			"request": {
 				"auth": {
-					"type": "noauth"
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
 				},
 				"method": "GET",
 				"header": [],
@@ -1846,16 +1853,16 @@
 					}
 				},
 				"url": {
-					"raw": "http://localhost:8082/master-attribute/show/{key}",
+					"raw": "http://localhost:8080/master-attribute/show/DEFAULT_NOTIFICATION",
 					"protocol": "http",
 					"host": [
 						"localhost"
 					],
-					"port": "8082",
+					"port": "8080",
 					"path": [
 						"master-attribute",
 						"show",
-						"{key}"
+						"DEFAULT_NOTIFICATION"
 					]
 				}
 			},
@@ -1997,6 +2004,118 @@
 						"admin",
 						"master-attribute",
 						"show-all"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "favorite/add",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \r\n    \"bioDataId\": \"66bf6e8c212e9e64e427bf61\",\r\n    \"username\": \"bhargavijoshi98@gmail.com\",\r\n    \"fullName\": \"shailesh  rakhade\",\r\n    \"education\": \"MCA\",\r\n    \"dob\": \"240597\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8084/favorite/add",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8084",
+					"path": [
+						"favorite",
+						"add"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "favorite/show",
+			"protocolProfileBehavior": {
+				"disableBodyPruning": true
+			},
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/favorite/show",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"favorite",
+						"show"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "favorite/delete/{id}",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "{{bhargavijoshi98}}",
+							"type": "string"
+						}
+					]
+				},
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/favorite/delete/240519ljkadkj97khjh",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"favorite",
+						"delete",
+						"240519ljkadkj97khjh"
 					]
 				}
 			},

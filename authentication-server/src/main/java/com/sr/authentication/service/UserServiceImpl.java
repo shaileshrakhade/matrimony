@@ -13,6 +13,7 @@ import com.sr.authentication.util.jwt.JwtClaims;
 import com.sr.authentication.util.jwt.JwtTokenGenerate;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +26,7 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserServiceImpl implements UserService {
 
     private final UserRepository userRepository;
@@ -32,6 +34,7 @@ public class UserServiceImpl implements UserService {
     private final JwtClaims jwtClaims;
     private final JwtTokenGenerate jwtTokenGenerate;
     private final CustomUserDetailsService customUserDetailsService;
+    private final AsyncServices asyncServices;
 
     @Value("${custom.security.otp.expiry.time}")
     private long otpExpiryTime;
@@ -110,24 +113,13 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    @Transactional
-    public String passwordUpdate(UserCredentialDto UserCredentialDto) {
-        Optional<Users> useroptional = userRepository.findByUserName(UserCredentialDto.getUserName());
-        if (useroptional.isPresent()) {
-            Users user = useroptional.get();
-            user.setPassword(passwordEncoder.encode(UserCredentialDto.getPassword()));
-            return userRepository.save(user).getUserName();
-        } else {
-            throw new UsernameNotFoundException("User Name not exist");
-        }
-    }
-
-    @Override
     public String activeUser(UserCredentialDto UserCredentialDto) {
         Users users = userRepository.findByUserName(UserCredentialDto.getUserName()).orElseThrow(() -> new UsernameNotFoundException("User Name not exist"));
         users.setPassword(passwordEncoder.encode(UserCredentialDto.getPassword()));
         users.setActive(UserCredentialDto.isActive());
-        return userRepository.save(users).getUserName();
+        log.debug("Async call save from activeUser!");
+        asyncServices.save(users);
+        return users.getUserName();
     }
 
     @Override
@@ -143,7 +135,8 @@ public class UserServiceImpl implements UserService {
         users.setPhoneNumber(userDetailsDto.getPhoneNumber());
         users.setFullName(userDetailsDto.getFullName());
         users.setUpdateOn(new Date());
-        users = userRepository.save(users);
+        log.debug("Async call save from updateUser!");
+        asyncServices.save(users);
         return UserDetailsDto.builder()
                 .id(users.getId())
                 .userName(users.getUserName())
@@ -187,14 +180,17 @@ public class UserServiceImpl implements UserService {
         Users user = userRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         user.setOtp(otp);
         user.setOtpExpiryOn(new Date(System.currentTimeMillis() + otpExpiryTime));
-        return userRepository.save(user).getOtp();
+        log.debug("Async call save from otpUpdate!");
+        asyncServices.save(user);
+        return user.getOtp();
     }
 
     @Override
     @Transactional
     public boolean deleteUser(Long userId, String username) {
         userRepository.findByIdAndUserName(userId, username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
-        userRepository.deleteByIdAndUserName(userId, username);
+        log.debug("Async call deleteByIdAndUserName from deleteUser!");
+        asyncServices.deleteByIdAndUserName(userId, username);
         return true;
     }
 
@@ -202,7 +198,8 @@ public class UserServiceImpl implements UserService {
     public boolean deActiveUser(Long userId, String username) {
         Users users = userRepository.findByIdAndUserName(userId, username).orElseThrow(() -> new UsernameNotFoundException("User not found"));
         users.setActive(false);
-        userRepository.save(users);
+        log.debug("Async call save from deActiveUser!");
+        asyncServices.save(users);
         return true;
 
     }
@@ -211,7 +208,8 @@ public class UserServiceImpl implements UserService {
     public UserDetailsDto markAdmin(Role role, String username) {
         Users users = userRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("User Name not exist"));
         users.setRole(role);
-        users = userRepository.save(users);
+        log.debug("Async call save from markAdmin!");
+        asyncServices.save(users);
         return UserDetailsDto.builder()
                 .id(users.getId())
                 .userName(users.getUserName())
@@ -232,7 +230,8 @@ public class UserServiceImpl implements UserService {
     public String generateToken(String username) {
         Users users = userRepository.findByUserName(username).orElseThrow(() -> new UsernameNotFoundException("User Name not exist"));
         users.setTokenGeneratorOn(new Date());
-        users = userRepository.save(users);
+        log.debug("Async call save from generateToken!");
+        asyncServices.save(users);
         //set roles in token
         return jwtTokenGenerate
                 .generateToken(customUserDetailsService.loadUserByUsername(username));

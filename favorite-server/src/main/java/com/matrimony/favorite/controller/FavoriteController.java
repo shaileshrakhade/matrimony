@@ -14,6 +14,8 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 @RestController
 @RequestMapping("/favorite/")
@@ -28,10 +30,10 @@ public class FavoriteController {
 
 
     @PostMapping("add")
-    public FavoriteDao add(HttpServletRequest request, @RequestBody FavoriteDao favoriteDao) throws AlreadyAddedInFavorateException, BioDataNotFoundException {
+    public FavoriteDao add(HttpServletRequest request, @RequestBody FavoriteDao favoriteDao) throws AlreadyAddedInFavorateException, BioDataNotFoundException, InterruptedException, ExecutionException {
         String username = jwtClaims.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
         favoriteDao.setUsername(username);
-        return favoriteService.add(favoriteDao,request);
+        return favoriteService.add(favoriteDao, request);
     }
 
     @GetMapping("show")
@@ -41,9 +43,10 @@ public class FavoriteController {
     }
 
     @DeleteMapping("delete/{id}")
-    public long delete(HttpServletRequest request, @PathVariable long id) {
+    public boolean delete(HttpServletRequest request, @PathVariable long id) {
         String username = jwtClaims.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
-        return favoriteService.delete(id, username);
+        favoriteService.delete(id, username);
+        return true;
     }
 
 }

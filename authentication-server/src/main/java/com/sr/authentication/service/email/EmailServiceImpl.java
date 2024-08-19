@@ -13,7 +13,7 @@ import java.io.File;
 
 @Service
 @RequiredArgsConstructor
-@Async
+@Async("asyncTaskExecutor")
 public class EmailServiceImpl implements EmailService {
 
     private final JavaMailSender mailSender;

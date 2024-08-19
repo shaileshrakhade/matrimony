@@ -5,47 +5,37 @@ import com.matrimony.favorite.customExceptions.exceptions.FavoriteNotFoundExcept
 import com.matrimony.favorite.dao.FavoriteDao;
 import com.matrimony.favorite.module.Favorite;
 import com.matrimony.favorite.repository.FavoriteRepository;
-import io.micrometer.observation.Observation;
 import io.micrometer.observation.ObservationRegistry;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.ws.rs.core.HttpHeaders;
-import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.reactive.function.client.WebClient;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
+
 
 @Service
-@RequiredArgsConstructor
 @Slf4j
 public class FavoriteServiceImpl implements FavoriteService {
 
-    private final FavoriteRepository favoriteRepository;
-    private final ObservationRegistry observationRegistry;
-    private final WebClient.Builder webClientBuilder;
+    @Autowired
+    private FavoriteRepository favoriteRepository;
+    @Autowired
+    private ObservationRegistry observationRegistry;
+    @Autowired
+    private BiodataService biodataService;
+    @Autowired
+    private AsyncServices asyncServices;
 
     @Override
-    public FavoriteDao add(FavoriteDao favoriteDao, HttpServletRequest request) throws BioDataNotFoundException {
-        boolean isPresent = false;
-        // Call Inventory Service, and place order if product is in stock
-        Observation inventoryServiceObservation = Observation.createNotStarted("BIODATA-SERVICE-LOOKUP",
-                this.observationRegistry);
-        log.info("Calling the BIODATA-SERVICE");
-        inventoryServiceObservation.lowCardinalityKeyValue("call", "BIODATA-SERVICE");
-        //inventoryServiceObservation is used to maintain the same SPAN ID to tract it's single request
-        isPresent = Boolean.TRUE.equals(inventoryServiceObservation.observe(() -> {
-            return webClientBuilder.build()
-                    .get()
-                    .uri("http://BIODATA-SERVICE/bio-data/is-present/" + favoriteDao.getBioDataId())
-//                    .header(HttpHeaders.AUTHORIZATION, request.getHeader(HttpHeaders.AUTHORIZATION))
-                    .retrieve().bodyToMono(Boolean.class).block();
-        }));
-        if (isPresent) {
+    public FavoriteDao add(FavoriteDao favoriteDao, HttpServletRequest request) throws BioDataNotFoundException, ExecutionException, InterruptedException {
+        log.debug(Thread.currentThread().getName());
+        if (biodataService.isPresent(request, favoriteDao.getBioDataId())) {
             Favorite favorite = Favorite.builder()
                     .bioDataId(favoriteDao.getBioDataId())
                     .username(favoriteDao.getUsername())
@@ -55,10 +45,11 @@ public class FavoriteServiceImpl implements FavoriteService {
                     .build();
 
             Optional<Favorite> favoriteOptional = favoriteRepository.findByBioDataIdAndUsername(favoriteDao.getBioDataId(), favoriteDao.getUsername());
-            if (favoriteOptional.isPresent())
-                favorite.setId(favoriteOptional.get().getId());
-
-            favorite = favoriteRepository.save(favorite);
+            favoriteOptional.ifPresent(value -> favorite.setId(value.getId()));
+            //Async save method call
+            log.debug(Thread.currentThread().getName());
+            log.debug("call Async save from add!");
+            asyncServices.save(favorite);
             return FavoriteDao.builder()
                     .id(favorite.getId())
                     .bioDataId(favorite.getBioDataId())
@@ -68,11 +59,7 @@ public class FavoriteServiceImpl implements FavoriteService {
                     .dob(favorite.getDob())
                     .build();
         } else {
-            try {
-                throw new BioDataNotFoundException("Biodata is not Exist");
-            } catch (BioDataNotFoundException e) {
-                throw new RuntimeException(e);
-            }
+            throw new BioDataNotFoundException("Biodata is not Exist");
         }
 
 
@@ -86,7 +73,9 @@ public class FavoriteServiceImpl implements FavoriteService {
         favorite.setEducation(favoriteDao.getEducation());
         favorite.setDob(favoriteDao.getDob());
 
-        favorite = favoriteRepository.save(favorite);
+        log.debug(Thread.currentThread().getName());
+        log.debug("call Async save from update!");
+        asyncServices.save(favorite);
         return FavoriteDao.builder()
                 .id(favorite.getId())
                 .bioDataId(favorite.getBioDataId())
@@ -115,7 +104,9 @@ public class FavoriteServiceImpl implements FavoriteService {
 
     @Override
     @Transactional
-    public long delete(Long id, String username) {
-        return favoriteRepository.deleteByIdAndUsername(id, username);
+    public void delete(Long id, String username) {
+        log.debug(Thread.currentThread().getName());
+        log.debug("call Async save from delete!");
+        asyncServices.deleteByIdAndUsername(id, username);
     }
 }

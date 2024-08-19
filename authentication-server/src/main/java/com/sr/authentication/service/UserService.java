@@ -19,7 +19,6 @@ public interface UserService {
 
     public UserDetailsDto getUserByUserName(String username);
 
-    public String passwordUpdate(UserCredentialDto UserCredentialDto);
 
     public String activeUser(UserCredentialDto UserCredentialDto);
 

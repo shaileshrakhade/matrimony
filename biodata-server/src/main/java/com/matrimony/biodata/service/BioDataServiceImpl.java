@@ -25,6 +25,8 @@ public class BioDataServiceImpl implements BioDataService {
 
     @Autowired
     private BioDatRepo bioDatRepo;
+    @Autowired
+    private AsyncServices asyncServices;
 
 
     @Override
@@ -35,7 +37,7 @@ public class BioDataServiceImpl implements BioDataService {
         bioData.setApprove(isApprove);
         bioData.setOperationsBy(username);
         bioData = bioDatRepo.save(bioData);
-        log.info("=======================  ${} BIODATA Is APPROVE BY ${} ===================================", bioData.getFullName(),bioData.getOperationsBy());
+        log.info("=======================  ${} BIODATA Is APPROVE BY ${} ===================================", bioData.getFullName(), bioData.getOperationsBy());
         return BioDataDao.builder()
                 .id(bioData.getId())
                 .username(bioData.getUsername())
@@ -73,7 +75,7 @@ public class BioDataServiceImpl implements BioDataService {
         bioData.setComment(comments);
         bioData.setOperationsBy(username);
         bioData = bioDatRepo.save(bioData);
-        log.info("=======================  ${} BIODATA SHOULD UPDATE ${} ===================================", bioData.getFullName(),bioData.getComment());
+        log.info("=======================  ${} BIODATA SHOULD UPDATE ${} ===================================", bioData.getFullName(), bioData.getComment());
         log.info("============================  END SHOULD UPDATE ==========================================");
         return BioDataDao.builder()
                 .id(bioData.getId())
@@ -225,8 +227,8 @@ public class BioDataServiceImpl implements BioDataService {
                     .isApprove(false)
                     .registerAt(new Date())
                     .build();
-
-            bioData = bioDatRepo.save(bioData);
+            log.debug("Async call for save");
+            asyncServices.save(bioData);
             log.info("============================${}=========================================", bioData.getFullName());
             log.info(bioData.toString());
             log.info("============================End=========================================");
@@ -287,7 +289,7 @@ public class BioDataServiceImpl implements BioDataService {
             bioData.setPaymentUrl(bioDataDao.getPaymentUrl());
             bioData.setComment("Application Updated! it will review & approved soon...");
             bioData.setUpdate(false);
-            bioData = bioDatRepo.save(bioData);
+            asyncServices.save(bioData);
             log.info("======================= UPDATE BIODATA OF ${} ===================================", bioData.getFullName());
             log.info(bioData.toString());
             log.info("============================ End UPDATE =========================================");
@@ -332,7 +334,10 @@ public class BioDataServiceImpl implements BioDataService {
     @Override
     @Transactional
     public long deleteOld(Date date) throws BioDataNotFoundException {
-        return bioDatRepo.deleteByRegisterAtBefore(date);
+        log.debug("Async call deleteByRegisterAtBefore!");
+        long count = bioDatRepo.countByRegisterAtBefore(date);
+        asyncServices.deleteByRegisterAtBefore(date);
+        return count;
     }
 
     @Override
