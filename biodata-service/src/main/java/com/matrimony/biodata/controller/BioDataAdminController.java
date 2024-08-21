@@ -66,16 +66,16 @@ public class BioDataAdminController {
 
     @PutMapping("need-update/{is-update}/{id}/{comments}")
     @ResponseStatus(HttpStatus.OK)
-    public BioDataDao shouldUpdate(HttpServletRequest request, @PathVariable("is-update") boolean isUpdate, @PathVariable("id") String id, @PathVariable("comments") String comments) throws BioDataNotFoundException {
+    public BioDataDao shouldUpdate(HttpServletRequest request, @PathVariable("lock") boolean lock, @PathVariable("id") String id, @PathVariable("comments") String comments) throws BioDataNotFoundException {
         String username = jwtClaims.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
-        return bioDataService.shouldUpdate(isUpdate, id, comments, username);
+        return bioDataService.shouldUpdate(lock, id, comments, username);
     }
 
     @PutMapping("approved/{is-approve}/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public BioDataDao Approve(HttpServletRequest request, @PathVariable("is-approve") boolean isApprove, @PathVariable("id") String id) throws BioDataNotFoundException {
+    public BioDataDao Approve(HttpServletRequest request, @PathVariable("id") String id) throws BioDataNotFoundException {
         String username = jwtClaims.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
-        return bioDataService.approve(isApprove, id, username);
+        return bioDataService.approve(id, username);
     }
 
     @DeleteMapping("delete/{id}")
@@ -93,6 +93,4 @@ public class BioDataAdminController {
         log.info("======================= DELETE OLD BIODATA REQUEST RISE BY ${} DELETE DATA FROM ${} ===================================", username, date);
         return bioDataService.deleteOld(date) + " bio-data was deleted before :: " + date;
     }
-
-
 }

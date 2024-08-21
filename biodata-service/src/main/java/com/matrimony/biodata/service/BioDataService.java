@@ -1,19 +1,23 @@
 package com.matrimony.biodata.service;
 
-import com.matrimony.biodata.customExceptions.exceptions.BioDataAlreadyApproveException;
+import com.matrimony.biodata.enums.FileType;
 import com.matrimony.biodata.customExceptions.exceptions.BioDataAlreadyExistException;
+import com.matrimony.biodata.customExceptions.exceptions.BioDataLockException;
 import com.matrimony.biodata.customExceptions.exceptions.BioDataNotFoundException;
-import com.matrimony.biodata.customExceptions.exceptions.BioDataUpdateException;
 import com.matrimony.biodata.dao.BioDataDao;
 import org.springframework.data.domain.Page;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.Date;
 import java.util.List;
 
 public interface BioDataService {
-    public BioDataDao approve(boolean isApprove, String id, String username) throws BioDataNotFoundException;
+    public BioDataDao approve(String id, String username) throws BioDataNotFoundException;
 
-    public BioDataDao shouldUpdate(boolean isUpdate, String id, String comments, String username) throws BioDataNotFoundException;
+    public BioDataDao shouldUpdate(boolean lock, String id, String comments, String username) throws BioDataNotFoundException;
 
     public List<BioDataDao> show(boolean isApprove);
 
@@ -23,9 +27,10 @@ public interface BioDataService {
 
     public BioDataDao showByUsername(String username) throws BioDataNotFoundException;
 
-    public BioDataDao add(BioDataDao bioDataDao, String username) throws BioDataAlreadyExistException;
+    public BioDataDao submitted(String username) throws BioDataNotFoundException;
 
-    public BioDataDao update(BioDataDao bioDataDao, String username, String id) throws BioDataNotFoundException, BioDataAlreadyApproveException, BioDataUpdateException;
+    public BioDataDao add(BioDataDao bioDataDao, String username) throws BioDataAlreadyExistException, IOException, BioDataLockException;
+
 
     public boolean delete(String id) throws BioDataNotFoundException;
 
@@ -33,4 +38,8 @@ public interface BioDataService {
 
 
     Page<BioDataDao> show(boolean b, int pageNo, int pageSize, String sort, String filter);
+
+    void uploadFile(MultipartFile file, String username, FileType fileType) throws IOException, BioDataNotFoundException, BioDataLockException;
+
+    InputStream getResource(String filename, FileType fileType) throws BioDataNotFoundException, FileNotFoundException;
 }

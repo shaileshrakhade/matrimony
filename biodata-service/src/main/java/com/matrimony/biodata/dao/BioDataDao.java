@@ -2,6 +2,7 @@ package com.matrimony.biodata.dao;
 
 import com.matrimony.biodata.model.BioData;
 import lombok.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Date;
 
@@ -28,11 +29,11 @@ public class BioDataDao {
     private String familyInformation;
     private String address;
     private String mamkul;
-    private String picUrl;
     private String paymentUrl;
+    private String picUrl;
     private String comment;
     private Date registerAt;
-    private boolean isUpdate;
+    private boolean isLock;
     private boolean isApprove;
 
 }

@@ -46,10 +46,16 @@ public class RestExceptionGlobalHandler {
         return new ResponseEntity<ApiExceptionDto>(apiExceptionDto, HttpStatus.FOUND);
     }
 
-    @ExceptionHandler(value = BioDataUpdateException.class)
-    public ResponseEntity<ApiExceptionDto> bioDataUpdateException(BioDataUpdateException e) {
+    @ExceptionHandler(value = BioDataLockException.class)
+    public ResponseEntity<ApiExceptionDto> bioDataLockException(BioDataLockException e) {
         ApiExceptionDto apiExceptionDto = new ApiExceptionDto(HttpStatus.FORBIDDEN, e.getMessage());
         return new ResponseEntity<ApiExceptionDto>(apiExceptionDto, HttpStatus.FORBIDDEN);
+    }
+
+    @ExceptionHandler(value = BioDataRegistrationCloseException.class)
+    public ResponseEntity<ApiExceptionDto> bioDataLockException(BioDataRegistrationCloseException e) {
+        ApiExceptionDto apiExceptionDto = new ApiExceptionDto(HttpStatus.NOT_ACCEPTABLE, e.getMessage());
+        return new ResponseEntity<ApiExceptionDto>(apiExceptionDto, HttpStatus.NOT_ACCEPTABLE);
     }
 
     @ExceptionHandler(value = MasterAttributesAlreadyExitException.class)

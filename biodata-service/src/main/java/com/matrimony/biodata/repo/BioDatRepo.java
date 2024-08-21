@@ -26,4 +26,10 @@ public interface BioDatRepo extends MongoRepository<BioData, String> {
     Page<BioData> findByIsApproveAndFullNameContainsIgnoreCaseOrQualificationContainsIgnoreCaseOrAddressContainsIgnoreCaseOrJobContainsIgnoreCase(Pageable pageable, boolean b, String filter, String filter1, String filter2, String filter3);
 
     long countByRegisterAtBefore(Date date);
+
+    Optional<BioData> findByIdAndIsLock(String id, boolean b);
+
+    Optional<BioData> findByIdAndIsLockAndIsApprove(String id, boolean b, boolean isApprove);
+
+    Optional<BioData> findAllByIsApproveAndIsLock(boolean isApprove, boolean b);
 }

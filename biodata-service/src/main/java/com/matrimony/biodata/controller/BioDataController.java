@@ -1,9 +1,10 @@
 package com.matrimony.biodata.controller;
 
-import com.matrimony.biodata.customExceptions.exceptions.BioDataAlreadyApproveException;
+import com.matrimony.biodata.customExceptions.exceptions.BioDataRegistrationCloseException;
+import com.matrimony.biodata.enums.FileType;
 import com.matrimony.biodata.customExceptions.exceptions.BioDataAlreadyExistException;
+import com.matrimony.biodata.customExceptions.exceptions.BioDataLockException;
 import com.matrimony.biodata.customExceptions.exceptions.BioDataNotFoundException;
-import com.matrimony.biodata.customExceptions.exceptions.BioDataUpdateException;
 import com.matrimony.biodata.dao.BioDataDao;
 import com.matrimony.biodata.masters.exceptions.MasterAttributesNotFoundException;
 import com.matrimony.biodata.masters.service.MasterService;
@@ -12,12 +13,20 @@ import com.matrimony.biodata.securityConfig.enums.Role;
 import com.matrimony.biodata.service.BioDataService;
 import com.matrimony.biodata.util.jwt.JwtClaims;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.util.StreamUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.Objects;
 
 
 @RestController
@@ -57,29 +66,48 @@ public class BioDataController {
         return bioDataService.showByUsername(username);
     }
 
-    @PostMapping("test-add/{username}")
+    @PostMapping("submitted")
     @ResponseStatus(HttpStatus.CREATED)
-    public BioDataDao add(@RequestBody BioDataDao bioDataDao, @PathVariable("username") String username) throws BioDataAlreadyExistException {
-        return bioDataService.add(bioDataDao, username);
+    public BioDataDao add(HttpServletRequest request) throws BioDataNotFoundException {
+        return bioDataService.submitted(jwtClaims.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION)));
     }
 
     @PostMapping("add")
     @ResponseStatus(HttpStatus.CREATED)
-    public BioDataDao add(HttpServletRequest request, @RequestBody BioDataDao bioDataDao) throws BioDataAlreadyExistException {
-        String tokenUsername;
+    public BioDataDao add(HttpServletRequest request, HttpServletResponse response, @RequestBody BioDataDao bioDataDao) throws BioDataAlreadyExistException, IOException, BioDataLockException, MasterAttributesNotFoundException, BioDataRegistrationCloseException {
+        if (masterService.isRegistrationClose())
+            throw new BioDataRegistrationCloseException("Registration was Close!");
+
+        String username;
+        response.setContentType(MediaType.MULTIPART_FORM_DATA_VALUE);
         if (jwtClaims.extractRoles(request.getHeader(HttpHeaders.AUTHORIZATION)).contains(Role.ADMIN.name()))
-            tokenUsername = bioDataDao.getPhoneNumber();
+            username = bioDataDao.getPhoneNumber();
         else
-            tokenUsername = jwtClaims.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
+            username = jwtClaims.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
 
-        return bioDataService.add(bioDataDao, tokenUsername);
+        return bioDataService.add(bioDataDao, username);
     }
 
-    @PutMapping("update/{username}/{id}")
+    @PostMapping("upload-file")
     @ResponseStatus(HttpStatus.OK)
-    public BioDataDao update(@RequestBody BioDataDao bioDataDao, @PathVariable("id") String id, @PathVariable("username") String username) throws BioDataAlreadyApproveException, BioDataNotFoundException, BioDataUpdateException {
-        return bioDataService.update(bioDataDao, username, id);
+    public String uploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file, @RequestParam("filetype") FileType fileType) throws Exception {
+        if (Objects.equals(file.getContentType(), MediaType.IMAGE_JPEG_VALUE)) {
+            String username = jwtClaims.extractUsername(request.getHeader(HttpHeaders.AUTHORIZATION));
+            bioDataService.uploadFile(file, username, fileType);
+            return fileType.name() + " Successfully Updated";
+        } else {
+            throw new Exception("Only " + MediaType.IMAGE_JPEG_VALUE + " is supported");
+        }
     }
 
-
+    @PostMapping("download-file")
+    @ResponseStatus(HttpStatus.OK)
+    public void downloadFile(HttpServletResponse response, @RequestParam("filename") String filename, @RequestParam("filetype") FileType fileType) throws IOException, BioDataNotFoundException {
+        InputStream inputStream = bioDataService.getResource(filename, fileType);
+        if (!fileType.equals(FileType.Other))
+            response.setContentType(MediaType.IMAGE_JPEG_VALUE);
+        else
+            response.setContentType(MediaType.APPLICATION_PDF_VALUE);
+        StreamUtils.copy(inputStream, response.getOutputStream());
+    }
 }

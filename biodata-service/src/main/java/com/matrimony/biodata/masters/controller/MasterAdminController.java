@@ -5,10 +5,13 @@ import com.matrimony.biodata.masters.exceptions.MasterAttributesAlreadyExitExcep
 import com.matrimony.biodata.masters.exceptions.MasterAttributesNotFoundException;
 import com.matrimony.biodata.masters.service.MasterService;
 import com.matrimony.biodata.masters.util.Constants;
+import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -35,6 +38,7 @@ public class MasterAdminController {
     public List<MasterDao> showAll() {
         return masterService.showAll();
     }
+
     @PutMapping("make-publish/{flg}")
     @ResponseStatus(HttpStatus.OK)
     public MasterDao showAll(@PathVariable("flg") boolean flg) throws MasterAttributesNotFoundException {
@@ -43,6 +47,13 @@ public class MasterAdminController {
         masterDao.setValue(String.valueOf(flg));
         return masterService.update(masterDao);
     }
+
+    @PostMapping("publish-biodata-pdf")
+    @ResponseStatus(HttpStatus.OK)
+    public void uploadFile(HttpServletRequest request, @RequestParam("file") MultipartFile file) throws IOException, MasterAttributesNotFoundException {
+        masterService.publishBiodataPDF(file);
+    }
+
     @DeleteMapping("delete/{key}")
     @ResponseStatus(HttpStatus.OK)
     public boolean delete(@PathVariable("key") String key) throws MasterAttributesNotFoundException {
