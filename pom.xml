@@ -16,13 +16,13 @@
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
     <modules>
-        <module>config-server</module>
-        <module>discovery-server</module>
+        <module>config-service</module>
+        <module>discovery-service</module>
         <module>api-gateway</module>
-        <module>authentication-server</module>
-        <module>admin-server</module>
-        <module>biodata-server</module>
-        <module>favorite-server</module>
+        <module>authentication-service</module>
+        <module>admin-service</module>
+        <module>biodata-service</module>
+        <module>favorite-service</module>
     </modules>
     <properties>
         <maven.compiler.source>17</maven.compiler.source>
@@ -63,16 +63,12 @@
                 <version>3.2.1</version>
                 <configuration>
                     <from>
-                        <!--  eclipse-temurin   use to build the container images -->
+                        <!--                     eclipse-temurin   use to build the container images -->
                         <image>eclipse-temurin:17.0.4.1_1-jre</image>
                     </from>
                     <to>
-                        <!-- send that images to provided location i.e. docker hub-->
+                        <!--                        send that images to provided location i.e. docker hub-->
                         <image>registry.hub.docker.com/shaileshrakhade/matrimony-${project.artifactId}</image>
-                        <auth>
-                            <username>shaileshrakhade</username>
-                            <password>Shailesh@1997</password>
-                        </auth>
                         <tags>
                             <tag>latest</tag>
                             <tag>${project.version}</tag>
