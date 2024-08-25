@@ -159,7 +159,7 @@ public class UserServiceImpl implements UserService {
         } else {
             Users user = Users.builder()
                     .userName(userDetailsDto.getUserName())
-                    .password(passwordEncoder.encode(userDetailsDto.getPhoneNumber()))
+                    .password(passwordEncoder.encode(userDetailsDto.getPassword()))
                     .emailId(userDetailsDto.getEmailId())
                     .phoneNumber(userDetailsDto.getPhoneNumber())
                     .fullName(userDetailsDto.getFullName())
@@ -167,6 +167,9 @@ public class UserServiceImpl implements UserService {
                     .role(userDetailsDto.getRoles())
                     .registerOn(new Date())
                     .build();
+            if (!userDetailsDto.getPassword().isEmpty())
+                user.setActive(true);
+
             Users users = userRepository.save(user);
             TokenDto tokenDto = new TokenDto();
             tokenDto.setToken(this.generateToken(users.getUserName()));

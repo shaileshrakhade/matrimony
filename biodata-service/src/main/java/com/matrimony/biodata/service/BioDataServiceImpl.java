@@ -74,6 +74,7 @@ public class BioDataServiceImpl implements BioDataService {
                 .paymentUrl(bioData.getPaymentUrl())
                 .registerAt(bioData.getRegisterAt())
                 .comment(bioData.getComment())
+                .isLock(bioData.isLock())
                 .isApprove(bioData.isApprove())
                 .build();
     }
@@ -338,7 +339,7 @@ public class BioDataServiceImpl implements BioDataService {
     public Page<BioDataDao> show(boolean isApprove, int pageNo, int pageSize, String sort, String filter) {
         Pageable pageable = PageRequest.of(pageNo, pageSize, Sort.by(sort));
 
-        return bioDatRepo.findByIsApproveAndFullNameContainsIgnoreCaseOrQualificationContainsIgnoreCaseOrAddressContainsIgnoreCaseOrJobContainsIgnoreCase(pageable, isApprove, filter, filter, filter, filter)
+        return bioDatRepo.findByIsLockAndIsApproveAndFullNameContainsIgnoreCaseOrQualificationContainsIgnoreCaseOrAddressContainsIgnoreCaseOrJobContainsIgnoreCase(pageable,true, isApprove, filter, filter, filter, filter)
                 .map(bioData -> BioDataDao.builder()
                         .id(bioData.getId())
                         .username(bioData.getUsername())
@@ -371,7 +372,7 @@ public class BioDataServiceImpl implements BioDataService {
             throw new BioDataLockException("Can't be edit now!");
 
 
-        String fileName = username + getExtensionByStringHandling(file.getOriginalFilename()).get();
+        String fileName = username + "." + getExtensionByStringHandling(file.getOriginalFilename()).get();
         switch (fileType) {
             case PROFILE:
                 bioData.setPicUrl(fileName);

@@ -23,7 +23,7 @@ public interface BioDatRepo extends MongoRepository<BioData, String> {
 
     //    Optional<BioData> findByIdStartsWithOrFullNameContainsOrQualificationContainsOrAddressContains(Pageable pageable, String filter, String filter1, String filter2, String filter3);
 //    @Query("{pages : {$fullName: { $regex : ?0 },qualification: { $regex : ?1 },address: { $regex : ?2 }}}")
-    Page<BioData> findByIsApproveAndFullNameContainsIgnoreCaseOrQualificationContainsIgnoreCaseOrAddressContainsIgnoreCaseOrJobContainsIgnoreCase(Pageable pageable, boolean b, String filter, String filter1, String filter2, String filter3);
+    Page<BioData> findByIsLockAndIsApproveAndFullNameContainsIgnoreCaseOrQualificationContainsIgnoreCaseOrAddressContainsIgnoreCaseOrJobContainsIgnoreCase(Pageable pageable, boolean lock,boolean approve, String filter, String filter1, String filter2, String filter3);
 
     long countByRegisterAtBefore(Date date);
 

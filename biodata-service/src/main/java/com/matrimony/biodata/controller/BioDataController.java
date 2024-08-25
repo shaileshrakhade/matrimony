@@ -30,6 +30,7 @@ import java.util.Objects;
 
 
 @RestController
+@CrossOrigin(origins = "*")
 @RequestMapping("/bio-data/")
 public class BioDataController {
 
@@ -100,7 +101,7 @@ public class BioDataController {
         }
     }
 
-    @PostMapping("download-file")
+    @GetMapping("download-file")
     @ResponseStatus(HttpStatus.OK)
     public void downloadFile(HttpServletResponse response, @RequestParam("filename") String filename, @RequestParam("filetype") FileType fileType) throws IOException, BioDataNotFoundException {
         InputStream inputStream = bioDataService.getResource(filename, fileType);

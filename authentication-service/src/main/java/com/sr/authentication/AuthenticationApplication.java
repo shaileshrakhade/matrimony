@@ -11,12 +11,14 @@ import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 
 import java.sql.SQLException;
 
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableAsync
+@CrossOrigin(origins = "*")
 public class AuthenticationApplication {
 
     @Autowired
