@@ -18,7 +18,7 @@ import java.sql.SQLException;
 @SpringBootApplication
 @EnableDiscoveryClient
 @EnableAsync
-@CrossOrigin(origins = "*")
+
 public class AuthenticationApplication {
 
     @Autowired
