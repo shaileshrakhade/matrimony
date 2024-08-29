@@ -13,7 +13,7 @@
     <groupId>com.matrimony</groupId>
     <artifactId>matrimony</artifactId>
     <name>MATRIMONY</name>
-    <version>1.0-SNAPSHOT</version>
+    <version>1.0</version>
     <packaging>pom</packaging>
     <modules>
         <module>config-service</module>

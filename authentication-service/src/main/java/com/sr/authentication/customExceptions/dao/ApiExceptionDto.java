@@ -8,11 +8,11 @@ import java.util.Date;
 @Data
 public class ApiExceptionDto {
     private HttpStatus httpStatus;
-    private String errorMessage;
+    private String message;
     private Date date=new Date();
 
-    public ApiExceptionDto(HttpStatus httpStatus, String errorMessage) {
+    public ApiExceptionDto(HttpStatus httpStatus, String message) {
         this.httpStatus=httpStatus;
-        this.errorMessage=errorMessage;
+        this.message=message;
     }
 }

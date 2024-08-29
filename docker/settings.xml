@@ -7,7 +7,11 @@
     <server>
       <id>registry.hub.docker.com</id>
       <username>shaileshrakhade</username>
-      <password>Shailesh@1997</password>
+      <password>dckr_pat_S69lWvU2O2-vhEW7IDFKW9BGUIQ</password>
     </server>
   </servers>
 </settings>
+<!--
+docker login -u shaileshrakhade
+dckr_pat_S69lWvU2O2-vhEW7IDFKW9BGUIQ
+-->

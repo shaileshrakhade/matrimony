@@ -16,7 +16,7 @@ services:
   # url  http://localhost:8881/application/default
   config-service:
     container_name: config-service
-    image: shaileshrakhade/matrimony-config-service:latest
+    image: shaileshrakhade/matrimony-config-service:1.0
     ports:
       - "8881:8881"
     expose:
@@ -31,7 +31,7 @@ services:
   # we have multiple microservice it very complex to communicate each other & to know the address so discovery service will provide the feature
   # to register all microservice with it & communicate each other by application its name
   discovery-service:
-    image: shaileshrakhade/matrimony-discovery-service:latest
+    image: shaileshrakhade/matrimony-discovery-service:1.0
     container_name: discovery-service
     ports:
       - "8761:8761"
@@ -49,7 +49,7 @@ services:
   # we have multiple microservice it very complex to communicate each other & to know the address so discovery service will provide the feature
   # to register all microservice with it & communicate each other by application its name
   matrimony-api-gateway:
-    image: shaileshrakhade/matrimony-api-gateway:latest
+    image: shaileshrakhade/matrimony-api-gateway:1.0
     container_name: matrimony-api-gateway
     ports:
       - "8080:8080"
@@ -67,7 +67,7 @@ services:
   ## Authentication Service Docker image Config
   matrimony-authentication-service:
     container_name: matrimony-authentication-service
-    image: shaileshrakhade/matrimony-authentication-service:latest
+    image: shaileshrakhade/matrimony-authentication-service:1.0
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -79,7 +79,7 @@ services:
   ## Admin Service Docker image Config
   matrimony-admin-service:
     container_name: matrimony-admin-service
-    image: shaileshrakhade/matrimony-admin-service:latest
+    image: shaileshrakhade/matrimony-admin-service:1.0
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
@@ -89,26 +89,24 @@ services:
   ## biodata Service Docker image Config
   matrimony-biodata-service:
     container_name: matrimony-biodata-service
-    image: shaileshrakhade/matrimony-biodata-service:latest
+    image: shaileshrakhade/matrimony-biodata-service:1.0
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - matrimony-api-gateway
       - matrimony-mongo-biodata
-
+    volumes:
+      - ../../matrimony_volumes/DockerVolumes/biodata-service:/etc/
   ## favorite Service Docker image Config
   matrimony-favorite-service:
     container_name: matrimony-favorite-service
-    image: shaileshrakhade/matrimony-favorite-service:latest
+    image: shaileshrakhade/matrimony-favorite-service:1.0
     environment:
       - SPRING_PROFILES_ACTIVE=docker
     depends_on:
       - matrimony-api-gateway
       - matrimony-mysql-favorite
       - matrimony-biodata-service
-
-
-
 
   #=================== SQL,NO-SQL Databases containers use for Micro-Service ===============================
   ## Databases used in microservices
